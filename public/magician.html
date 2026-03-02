@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Magician App</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a14;
+    --bg-card: #12121e;
+    --bg-card-hover: #1a1a2a;
+    --primary: #9a8ec4;
+    --primary-soft: #c8c0e0;
+    --primary-deep: #6a5e94;
+    --arcane: #7b68ee;
+    --arcane-soft: rgba(123, 104, 238, 0.15);
+    --arcane-glow: rgba(123, 104, 238, 0.3);
+    --arcane-glow-strong: rgba(123, 104, 238, 0.6);
+    --silver: #c0c0d0;
+    --text: #d8d4e0;
+    --text-soft: #8a86a0;
+    --text-muted: #4a4860;
+    --void: #1a1830;
+    --void-light: #2a2848;
+    --mercury: #a0a0c0;
+    --skin: #c4a882;
+    --skin-shadow: #a08a6e;
+    --hair: #1a1a2e;
+    --cloth: #14142a;
+    --sigil: rgba(123, 104, 238, 0.03);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Sigil texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle 3px at 15px 15px, var(--sigil) 50%, transparent 50%),
+      radial-gradient(circle 2px at 35px 35px, var(--sigil) 50%, transparent 50%);
+    background-size: 44px 44px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+
+  @keyframes pulse-arcane {
+    0%, 100% { box-shadow: 0 0 8px var(--arcane-soft); }
+    50% { box-shadow: 0 0 20px rgba(123, 104, 238, 0.4); }
+  }
+
+  @keyframes float-sigil {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) rotate(30deg) scale(0.4); }
+  }
+
+  @keyframes glow-border {
+    0%, 100% { border-color: var(--primary); box-shadow: 0 0 8px var(--arcane-glow); }
+    50% { border-color: var(--primary-soft); box-shadow: 0 0 16px var(--arcane-glow-strong); }
+  }
+
+  @keyframes aura-pulse {
+    0%, 100% { box-shadow: 0 0 20px transparent; }
+    50% { box-shadow: 0 0 40px var(--arcane-glow); }
+  }
+
+  @keyframes aura-pulse-full {
+    0%, 100% { box-shadow: 0 0 30px var(--arcane-soft); }
+    50% { box-shadow: 0 0 60px rgba(123, 104, 238, 0.35); }
+  }
+
+  @keyframes orb-breathe {
+    0%, 100% { box-shadow: 0 0 8px var(--arcane-glow), 0 0 20px var(--arcane-soft); }
+    50% { box-shadow: 0 0 16px var(--arcane-glow-strong), 0 0 40px var(--arcane-glow); }
+  }
+
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(14px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(14px) rotate(-360deg); }
+  }
+
+  /* ========== HEADER ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .header h1 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    color: var(--arcane);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  .header .subtitle {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-soft);
+    margin-bottom: 0.4rem;
+  }
+
+  .header .tagline {
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ========== STREAK ========== */
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0.35rem 0.85rem;
+    background: var(--arcane-soft);
+    border: 1px solid rgba(123, 104, 238, 0.2);
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--arcane);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .streak-badge.show { opacity: 1; }
+  .streak-badge .flame { font-size: 0.8rem; }
+
+  /* ========== AVATAR ========== */
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.25s both;
+  }
+
+  .avatar-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 11;
+    transition: color 0.4s ease;
+  }
+
+  .avatar-title.ascending { color: var(--primary); }
+  .avatar-title.transcended { color: var(--arcane); }
+
+  .avatar-wrap {
+    position: relative;
+    width: 180px;
+    height: 280px;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    transition: box-shadow 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-wrap.aura-1 { animation: aura-pulse 3s ease-in-out infinite; }
+  .avatar-wrap.aura-2 { animation: aura-pulse 2.5s ease-in-out infinite; }
+  .avatar-wrap.aura-3 { animation: aura-pulse 2s ease-in-out infinite; }
+  .avatar-wrap.aura-4 { animation: aura-pulse-full 2s ease-in-out infinite; }
+
+  .avatar-figure {
+    position: relative;
+    width: 160px;
+    height: 260px;
+  }
+
+  /* Workbench / Altar */
+  .altar {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 16px;
+    background: var(--void);
+    border-radius: 4px;
+    z-index: 0;
+    border: 1px solid var(--void-light);
+  }
+
+  .altar::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 10px;
+    right: 10px;
+    height: 4px;
+    background: var(--void-light);
+    border-radius: 2px;
+  }
+
+  /* Head */
+  .avatar-head {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 48px;
+    background: var(--skin);
+    border-radius: 50% 50% 45% 45%;
+    z-index: 4;
+  }
+
+  /* Hair */
+  .avatar-hair {
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 26px;
+    background: var(--hair);
+    border-radius: 50% 50% 30% 30%;
+    z-index: 5;
+  }
+
+  /* Third eye (hidden by default) */
+  .avatar-thirdeye {
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 8px;
+    height: 8px;
+    background: var(--arcane);
+    border-radius: 50%;
+    z-index: 6;
+    transition: transform 0.4s ease;
+    box-shadow: 0 0 8px var(--arcane-glow);
+  }
+
+  .avatar-thirdeye.show { transform: translateX(-50%) scale(1); }
+
+  /* Neck */
+  .avatar-neck {
+    position: absolute;
+    top: 84px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 14px;
+    background: var(--skin);
+    z-index: 3;
+  }
+
+  /* Torso */
+  .avatar-torso {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 70px;
+    background: var(--cloth);
+    border-radius: 6px 6px 2px 2px;
+    z-index: 3;
+    transition: all 0.4s ease;
+    border: 1px solid #2a2a40;
+  }
+
+  /* V-neck */
+  .avatar-torso::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 16px solid var(--skin);
+  }
+
+  /* Robes (hidden by default) */
+  .avatar-robes {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 125px;
+    background: linear-gradient(180deg, #1a1840 0%, #0e0e28 100%);
+    border-radius: 0 0 35px 35px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border: 1px solid #2a2850;
+  }
+
+  .avatar-robes.show { opacity: 1; }
+
+  .avatar-robes::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 60px;
+    border-left: 1px solid rgba(123, 104, 238, 0.15);
+    border-right: 1px solid rgba(123, 104, 238, 0.15);
+  }
+
+  /* Rune trim on robes */
+  .robe-rune-1, .robe-rune-2, .robe-rune-3 {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 1px solid rgba(123, 104, 238, 0.3);
+    border-radius: 50%;
+  }
+
+  .robe-rune-1 { bottom: 40px; left: 15px; }
+  .robe-rune-2 { bottom: 55px; right: 15px; }
+  .robe-rune-3 { bottom: 25px; left: 50%; transform: translateX(-50%); }
+
+  /* Arms */
+  .avatar-arm-left, .avatar-arm-right {
+    position: absolute;
+    top: 100px;
+    width: 16px;
+    height: 50px;
+    background: var(--skin);
+    border-radius: 8px;
+    z-index: 2;
+  }
+
+  .avatar-arm-left { left: 26px; transform: rotate(6deg); }
+  .avatar-arm-right { right: 26px; transform: rotate(-6deg); }
+
+  /* Grimoire / Book (hidden by default) */
+  .avatar-grimoire {
+    position: absolute;
+    top: 120px;
+    left: 16px;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-grimoire.show { opacity: 1; }
+
+  .grimoire-cover {
+    width: 24px;
+    height: 30px;
+    background: #2a1a3a;
+    border-radius: 2px 4px 4px 2px;
+    border: 1px solid var(--primary-deep);
+    position: relative;
+  }
+
+  .grimoire-spine {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    bottom: 2px;
+    width: 3px;
+    background: var(--primary-deep);
+    border-radius: 2px 0 0 2px;
+  }
+
+  .grimoire-sigil {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--arcane);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  .grimoire-sigil::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--arcane);
+    opacity: 0.4;
+  }
+
+  /* Orb (hidden by default) */
+  .avatar-orb {
+    position: absolute;
+    top: 80px;
+    right: 14px;
+    z-index: 7;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-orb.show { opacity: 1; }
+
+  .orb-sphere {
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle at 35% 35%, #a090ee, var(--arcane), #4030a0);
+    border-radius: 50%;
+    animation: orb-breathe 2.5s ease-in-out infinite;
+    position: relative;
+  }
+
+  .orb-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--arcane);
+    border-radius: 50%;
+    animation: orbit 3s linear infinite;
+    top: 50%;
+    left: 50%;
+  }
+
+  .orb-particle:nth-child(2) { animation-delay: -1s; animation-duration: 2.5s; }
+  .orb-particle:nth-child(3) { animation-delay: -2s; animation-duration: 3.5s; }
+
+  /* Rune circle at feet (hidden by default) */
+  .avatar-runecircle {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 30px;
+    border: 1px solid rgba(123, 104, 238, 0.2);
+    border-radius: 50%;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.1s;
+  }
+
+  .avatar-runecircle.show { opacity: 1; }
+
+  .avatar-runecircle::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid rgba(123, 104, 238, 0.1);
+    border-radius: 50%;
+  }
+
+  /* Legs */
+  .avatar-legs {
+    position: absolute;
+    top: 164px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+  }
+
+  .avatar-leg-left, .avatar-leg-right {
+    position: absolute;
+    width: 18px;
+    height: 55px;
+    background: var(--cloth);
+    border-radius: 4px;
+    border: 1px solid #2a2a40;
+  }
+
+  .avatar-leg-left { left: -22px; }
+  .avatar-leg-right { left: 4px; }
+
+  .avatar-boot-left, .avatar-boot-right {
+    position: absolute;
+    top: 50px;
+    width: 22px;
+    height: 12px;
+    background: #14102a;
+    border-radius: 2px 6px 6px 2px;
+  }
+
+  .avatar-boot-left { left: -24px; }
+  .avatar-boot-right { left: 2px; border-radius: 6px 2px 2px 6px; }
+
+  /* Sparkles */
+  .avatar-sparkles {
+    position: absolute;
+    inset: -20px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .avatar-sparkles.show { opacity: 1; }
+
+  .avatar-sparkles span {
+    position: absolute;
+    font-size: 0.7rem;
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+
+  .avatar-sparkles span:nth-child(1) { top: 8%; left: 5%; animation-delay: 0s; }
+  .avatar-sparkles span:nth-child(2) { top: 5%; right: 8%; animation-delay: 0.3s; }
+  .avatar-sparkles span:nth-child(3) { top: 40%; left: 0; animation-delay: 0.6s; }
+  .avatar-sparkles span:nth-child(4) { top: 35%; right: 0; animation-delay: 0.9s; }
+  .avatar-sparkles span:nth-child(5) { bottom: 25%; left: 8%; animation-delay: 0.4s; }
+  .avatar-sparkles span:nth-child(6) { bottom: 20%; right: 5%; animation-delay: 0.7s; }
+
+  /* Reward text */
+  .avatar-reward-text {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--arcane);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s ease;
+    text-align: center;
+    min-height: 1.5em;
+  }
+
+  .avatar-reward-text.show { opacity: 1; transform: translateY(0); }
+  .avatar-reward-text.tier { color: var(--text-soft); font-size: 0.95rem; }
+
+  /* ========== PRACTICES ========== */
+  .practices-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .practices-header {
+    font-family: 'Lora', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .practices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .practices-grid { grid-template-columns: 1fr; }
+  }
+
+  .practice-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--text-muted);
+    border-radius: 14px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .practice-card:hover { background: var(--bg-card-hover); border-color: var(--text-soft); }
+
+  .practice-card.checked {
+    border-color: var(--primary);
+    animation: glow-border 2s ease-in-out infinite;
+  }
+
+  .practice-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .practice-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    margin-top: 1px;
+  }
+
+  .practice-checkbox .check-icon {
+    opacity: 0;
+    color: var(--bg);
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease;
+  }
+
+  .practice-card.checked .practice-checkbox {
+    background: var(--arcane);
+    border-color: var(--arcane);
+    box-shadow: 0 0 8px var(--arcane-glow);
+  }
+
+  .practice-card.checked .practice-checkbox .check-icon { opacity: 1; }
+
+  .practice-name {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    transition: all 0.3s ease;
+    line-height: 1.4;
+  }
+
+  .practice-card.checked .practice-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--arcane);
+    color: var(--text-soft);
+  }
+
+  .practice-desc {
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: 2.15rem;
+    transition: color 0.3s ease;
+  }
+
+  .practice-card.checked .practice-desc { color: var(--text-soft); }
+
+  .practice-affirm {
+    margin-left: 2.15rem;
+    margin-top: 0.5rem;
+    font-family: 'Lora', serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--arcane);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.4s ease;
+  }
+
+  .practice-card.checked .practice-affirm { opacity: 1; transform: translateY(0); }
+
+  .sigil-float {
+    position: absolute;
+    font-size: 0.85rem;
+    pointer-events: none;
+    animation: float-sigil 1s ease-out forwards;
+  }
+
+  /* ========== PROGRESS ========== */
+  .progress-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.55s both;
+  }
+
+  .progress-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 10px;
+    background: rgba(123, 104, 238, 0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--void) 0%, var(--arcane) 100%);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .progress-bar-fill.full {
+    animation: pulse-arcane 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--arcane) 0%, #a090ee 100%);
+  }
+
+  .progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-soft);
+    transition: all 0.3s ease;
+  }
+
+  .progress-text.complete {
+    color: var(--arcane);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  /* ========== JOURNAL ========== */
+  .journal-section { margin-bottom: 2.5rem; animation: fadeUp 0.5s ease both; text-align: center; }
+  .journal-section.hidden { display: none; }
+
+  .journal-prompt {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--arcane);
+    margin-bottom: 0.75rem;
+  }
+
+  .journal-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--primary-soft);
+    background: var(--bg-card);
+    border: 1px solid var(--text-muted);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 3.5em;
+    transition: border-color 0.3s ease;
+  }
+
+  .journal-input::placeholder { color: var(--text-muted); font-style: italic; }
+  .journal-input:focus { border-color: var(--arcane); }
+
+  .journal-save-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .journal-save-btn:hover { color: var(--arcane); border-color: var(--arcane); }
+  .journal-save-btn.saved { color: var(--arcane); border-color: var(--arcane); cursor: default; }
+
+  /* ========== RESET ========== */
+  .reset-section { text-align: center; animation: fadeUp 0.8s ease 0.7s both; }
+
+  .reset-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .reset-btn:hover { color: var(--arcane); border-color: var(--arcane); }
+
+  /* ========== MODAL ========== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(10, 10, 20, 0.9); backdrop-filter: blur(6px);
+    z-index: 100; align-items: center; justify-content: center; padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-card); border: 1px solid var(--text-muted);
+    border-radius: 18px; padding: 2.5rem; max-width: 360px; width: 100%; text-align: center;
+  }
+
+  .modal p {
+    font-family: 'Lora', serif; font-size: 1rem; font-style: italic;
+    color: var(--primary-soft); margin-bottom: 1.5rem; line-height: 1.6;
+  }
+
+  .modal-btns { display: flex; gap: 0.75rem; justify-content: center; }
+
+  .modal-btn {
+    font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 0.6rem 1.3rem;
+    border-radius: 100px; cursor: pointer; transition: all 0.25s ease;
+  }
+
+  .modal-btn.confirm { background: var(--arcane); color: var(--bg); border: none; }
+  .modal-btn.confirm:hover { background: #8a7af0; }
+  .modal-btn.cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted); }
+  .modal-btn.cancel:hover { color: var(--text-soft); border-color: var(--text-soft); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>The Magician App</h1>
+    <div class="subtitle">Chaos is just material. Transform it.</div>
+    <div class="tagline">Study. Create. See clearly. Pass it on.</div>
+    <div class="streak-badge" id="streakBadge">
+      <span class="flame">🔮</span>
+      <span id="streakText">Day 1 streak</span>
+    </div>
+  </div>
+
+  <div class="avatar-section">
+    <div class="avatar-title" id="avatarTitle">Apprentice</div>
+    <div class="avatar-wrap" id="avatarWrap">
+      <div class="avatar-figure">
+        <!-- Altar -->
+        <div class="altar"></div>
+        <!-- Rune circle -->
+        <div class="avatar-runecircle" id="avatarRunecircle"></div>
+        <!-- Robes -->
+        <div class="avatar-robes" id="avatarRobes">
+          <div class="robe-rune-1"></div>
+          <div class="robe-rune-2"></div>
+          <div class="robe-rune-3"></div>
+        </div>
+        <!-- Hair & Third eye -->
+        <div class="avatar-hair"></div>
+        <div class="avatar-thirdeye" id="avatarThirdeye"></div>
+        <!-- Head & Neck -->
+        <div class="avatar-head"></div>
+        <div class="avatar-neck"></div>
+        <!-- Arms -->
+        <div class="avatar-arm-left"></div>
+        <div class="avatar-arm-right"></div>
+        <!-- Torso -->
+        <div class="avatar-torso"></div>
+        <!-- Grimoire -->
+        <div class="avatar-grimoire" id="avatarGrimoire">
+          <div class="grimoire-cover">
+            <div class="grimoire-spine"></div>
+            <div class="grimoire-sigil"></div>
+          </div>
+        </div>
+        <!-- Orb -->
+        <div class="avatar-orb" id="avatarOrb">
+          <div class="orb-sphere">
+            <div class="orb-particle"></div>
+            <div class="orb-particle"></div>
+            <div class="orb-particle"></div>
+          </div>
+        </div>
+        <!-- Legs -->
+        <div class="avatar-legs">
+          <div class="avatar-leg-left"></div>
+          <div class="avatar-leg-right"></div>
+          <div class="avatar-boot-left"></div>
+          <div class="avatar-boot-right"></div>
+        </div>
+        <!-- Sparkles -->
+        <div class="avatar-sparkles" id="avatarSparkles">
+          <span>◈</span><span>◈</span><span>◈</span>
+          <span>◈</span><span>◈</span><span>◈</span>
+        </div>
+      </div>
+    </div>
+    <div class="avatar-reward-text" id="avatarRewardText"></div>
+  </div>
+
+  <div class="practices-section">
+    <div class="practices-header">Today's Transmutation</div>
+    <div class="practices-grid" id="practicesGrid"></div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-label">Today's transformation:</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 of 4 practices complete</div>
+  </div>
+
+  <div class="journal-section hidden" id="journalSection">
+    <div class="journal-prompt" id="journalPrompt">What did you transform today?</div>
+    <textarea class="journal-input" id="journalInput" placeholder="Write it into the grimoire..." rows="3"></textarea>
+    <br>
+    <button class="journal-save-btn" id="journalSaveBtn" onclick="saveJournal()">Inscribe it</button>
+  </div>
+
+  <div class="reset-section">
+    <button class="reset-btn" onclick="showResetModal()">Clear the Altar</button>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <p>The work dissolves at midnight anyway.<br>Ready to transmute again?</p>
+    <div class="modal-btns">
+      <button class="modal-btn confirm" onclick="confirmReset()">Begin the work</button>
+      <button class="modal-btn cancel" onclick="closeResetModal()">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PRACTICES = [
+    { key: 'study', name: 'Study Something', desc: 'Read, listen, absorb. The magician never stops learning.' },
+    { key: 'create', name: 'Create Something', desc: 'Code, write, design, build. Turn raw material into form.' },
+    { key: 'see', name: 'See a Pattern', desc: 'Connect two things that seemed unrelated. That\'s the real magic.' },
+    { key: 'transmit', name: 'Teach or Share', desc: 'Knowledge hoarded is knowledge wasted. Pass the signal on.' }
+  ];
+
+  const PRAISE_POOL = [
+    'Transmuted.', 'The pattern reveals itself.', 'Knowledge acquired.', 'Alchemy.',
+    'Signal received.', 'The work deepens.', 'Clarity.', 'Understood.',
+    'The grimoire grows.', 'Mastery in motion.'
+  ];
+
+  const TIER_MESSAGES = [
+    '',
+    'The first ingredient. The work begins.',
+    'Halfway through the formula.',
+    'Almost there. The transmutation nears.',
+    ''
+  ];
+
+  const FULL_PRAISE = [
+    'Full transmutation. Lead into gold.',
+    'Every practice complete. The pattern is clear.',
+    'The magician sees what others miss.',
+    'Chaos organized. Mastery demonstrated.',
+    'Nothing wasted. Everything transformed.'
+  ];
+
+  const JOURNAL_PROMPTS = [
+    'What did you transform today?',
+    'What pattern finally clicked?',
+    'What do you understand now that you didn\'t this morning?',
+    'What\'s the most important thing you learned?',
+    'Where did confusion become clarity?'
+  ];
+
+  const TITLES = [
+    { min: 0, label: 'Apprentice', css: '' },
+    { min: 3, label: 'Adept', css: 'ascending' },
+    { min: 7, label: 'Alchemist', css: 'ascending' },
+    { min: 14, label: 'Seer', css: 'ascending' },
+    { min: 21, label: 'Archmage', css: 'transcended' },
+    { min: 30, label: 'Magician', css: 'transcended' }
+  ];
+
+  function getTitle(streak) {
+    let title = TITLES[0];
+    for (const t of TITLES) { if (streak >= t.min) title = t; }
+    return title;
+  }
+
+  function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function dayKey() { return new Date().toISOString().slice(0, 10); }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem('magician-practices');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data.checked || {};
+    } catch { return {}; }
+  }
+
+  function saveState(checked) {
+    localStorage.setItem('magician-practices', JSON.stringify({ date: dayKey(), checked }));
+  }
+
+  function loadStreak() {
+    try {
+      const raw = localStorage.getItem('magician-streak');
+      if (!raw) return { count: 0, lastDate: null };
+      return JSON.parse(raw);
+    } catch { return { count: 0, lastDate: null }; }
+  }
+
+  function saveStreak(s) { localStorage.setItem('magician-streak', JSON.stringify(s)); }
+
+  function loadJournal() {
+    try {
+      const raw = localStorage.getItem('magician-journal');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data;
+    } catch { return {}; }
+  }
+
+  function saveJournalEntry(text) {
+    const entries = JSON.parse(localStorage.getItem('magician-journal-history') || '[]');
+    entries.push({ date: dayKey(), text, timestamp: new Date().toISOString() });
+    localStorage.setItem('magician-journal-history', JSON.stringify(entries));
+    localStorage.setItem('magician-journal', JSON.stringify({ date: dayKey(), text, saved: true }));
+  }
+
+  let state = loadState();
+  let praisePicks = {};
+  PRACTICES.forEach(d => { praisePicks[d.key] = randomFrom(PRAISE_POOL); });
+
+  function updateStreak() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    if (count < 4) return;
+    const streak = loadStreak();
+    const today = dayKey();
+    if (streak.lastDate === today) return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = yesterday.toISOString().slice(0, 10);
+    if (streak.lastDate === yesterdayKey) { streak.count += 1; }
+    else if (streak.lastDate !== today) { streak.count = 1; }
+    streak.lastDate = today;
+    saveStreak(streak);
+  }
+
+  function renderPractices() {
+    const grid = document.getElementById('practicesGrid');
+    grid.innerHTML = PRACTICES.map(d => {
+      const isChecked = state[d.key] ? ' checked' : '';
+      const praise = praisePicks[d.key] || 'Transmuted.';
+      return '<div class="practice-card' + isChecked + '" data-key="' + d.key + '" onclick="togglePractice(\'' + d.key + '\', this)">' +
+        '<div class="practice-card-top">' +
+          '<div class="practice-checkbox"><span class="check-icon">✓</span></div>' +
+          '<div class="practice-name">' + d.name + '</div>' +
+        '</div>' +
+        '<div class="practice-desc">' + d.desc + '</div>' +
+        '<div class="practice-affirm">' + praise + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function togglePractice(key, card) {
+    state[key] = !state[key];
+    saveState(state);
+    if (state[key]) {
+      praisePicks[key] = randomFrom(PRAISE_POOL);
+      spawnSigil(card);
+    }
+    updateStreak();
+    renderAll();
+  }
+
+  function spawnSigil(card) {
+    const el = document.createElement('span');
+    el.className = 'sigil-float';
+    el.textContent = '◈';
+    el.style.left = (Math.random() * 60 + 20) + '%';
+    el.style.bottom = '20%';
+    card.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+
+  function renderAvatar() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const streak = loadStreak();
+    const title = getTitle(streak.count);
+
+    document.getElementById('avatarTitle').textContent = title.label;
+    document.getElementById('avatarTitle').className = 'avatar-title' + (title.css ? ' ' + title.css : '');
+
+    const wrap = document.getElementById('avatarWrap');
+    wrap.classList.remove('aura-1', 'aura-2', 'aura-3', 'aura-4');
+    if (count > 0) wrap.classList.add('aura-' + Math.min(count, 4));
+
+    const thirdeye = document.getElementById('avatarThirdeye');
+    const robes = document.getElementById('avatarRobes');
+    const grimoire = document.getElementById('avatarGrimoire');
+    const orb = document.getElementById('avatarOrb');
+    const runecircle = document.getElementById('avatarRunecircle');
+    const sparkles = document.getElementById('avatarSparkles');
+    const rewardText = document.getElementById('avatarRewardText');
+
+    thirdeye.classList.remove('show');
+    robes.classList.remove('show');
+    grimoire.classList.remove('show');
+    orb.classList.remove('show');
+    runecircle.classList.remove('show');
+    sparkles.classList.remove('show');
+    rewardText.classList.remove('show', 'tier');
+
+    // 1: third eye opens — you see
+    if (count >= 1) thirdeye.classList.add('show');
+    // 2: robes — you've committed to the craft
+    if (count >= 2) robes.classList.add('show');
+    // 3: grimoire — knowledge made tangible
+    if (count >= 3) grimoire.classList.add('show');
+
+    // 4: orb + rune circle + sparkles — full transmutation
+    if (count >= 4) {
+      orb.classList.add('show');
+      runecircle.classList.add('show');
+      sparkles.classList.add('show');
+      rewardText.textContent = randomFrom(FULL_PRAISE);
+      rewardText.classList.add('show');
+    } else if (count > 0) {
+      rewardText.textContent = TIER_MESSAGES[count];
+      rewardText.classList.add('show', 'tier');
+    }
+  }
+
+  function renderProgress() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    fill.style.width = (count / 4 * 100) + '%';
+    if (count === 4) {
+      fill.classList.add('full');
+      text.className = 'progress-text complete';
+      text.textContent = '◈ Full transmutation complete.';
+    } else {
+      fill.classList.remove('full');
+      text.className = 'progress-text';
+      text.textContent = count + ' of 4 practices complete';
+    }
+  }
+
+  function renderStreak() {
+    const streak = loadStreak();
+    const badge = document.getElementById('streakBadge');
+    const text = document.getElementById('streakText');
+    if (streak.count > 0) {
+      badge.classList.add('show');
+      text.textContent = 'Day ' + streak.count + ' streak';
+    } else { badge.classList.remove('show'); }
+  }
+
+  function renderJournal() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const section = document.getElementById('journalSection');
+    const saved = loadJournal();
+    if (count === 4) {
+      section.classList.remove('hidden');
+      document.getElementById('journalPrompt').textContent = randomFrom(JOURNAL_PROMPTS);
+      if (saved.saved) {
+        document.getElementById('journalInput').value = saved.text || '';
+        document.getElementById('journalSaveBtn').textContent = 'Inscribed ◈';
+        document.getElementById('journalSaveBtn').classList.add('saved');
+      }
+    } else { section.classList.add('hidden'); }
+  }
+
+  function saveJournal() {
+    const text = document.getElementById('journalInput').value.trim();
+    if (!text) return;
+    saveJournalEntry(text);
+    const btn = document.getElementById('journalSaveBtn');
+    btn.textContent = 'Inscribed ◈';
+    btn.classList.add('saved');
+  }
+
+  function renderAll() { renderPractices(); renderAvatar(); renderProgress(); renderStreak(); renderJournal(); }
+
+  function showResetModal() { document.getElementById('resetModal').classList.add('open'); }
+  function closeResetModal() { document.getElementById('resetModal').classList.remove('open'); }
+
+  function confirmReset() {
+    state = {};
+    saveState(state);
+    praisePicks = {};
+    PRACTICES.forEach(d => { praisePicks[d.key] = randomFrom(PRAISE_POOL); });
+    renderAll();
+    closeResetModal();
+  }
+
+  document.getElementById('resetModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeResetModal();
+  });
+
+  renderAll();
+
+  window.addEventListener('focus', () => {
+    const fresh = loadState();
+    if (Object.keys(fresh).length === 0 && Object.keys(state).length > 0) {
+      state = fresh;
+      renderAll();
+    }
+  });
+</script>
+
+</body>
+</html>

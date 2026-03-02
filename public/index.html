@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Showcase</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #1a1714;
+    --surface: #252220;
+    --surface-hover: #2e2a27;
+    --border: #3a3530;
+    --muted: #6b6058;
+    --text-secondary: #9a918a;
+    --text-primary: #e8e0d8;
+    --text-bright: #f5f0eb;
+    --amber: #c4956a;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .header h1 {
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    color: var(--text-bright);
+    margin-bottom: 0.3rem;
+  }
+
+  .header p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .demo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100px;
+    position: relative;
+  }
+
+  .demo-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--muted);
+    transform: translateY(-1px);
+  }
+
+  .demo-card .title {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-bright);
+    margin-bottom: 0.3rem;
+  }
+
+  .demo-card .desc {
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: auto;
+  }
+
+  .demo-card .arrow {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .demo-card:hover .arrow {
+    color: var(--text-secondary);
+    transform: translateX(2px);
+  }
+
+  .grid .demo-card:nth-child(1) { animation: fadeUp 0.8s ease 0.3s both; }
+  .grid .demo-card:nth-child(2) { animation: fadeUp 0.8s ease 0.4s both; }
+  .grid .demo-card:nth-child(3) { animation: fadeUp 0.8s ease 0.5s both; }
+  .grid .demo-card:nth-child(4) { animation: fadeUp 0.8s ease 0.6s both; }
+  .grid .demo-card:nth-child(5) { animation: fadeUp 0.8s ease 0.7s both; }
+  .grid .demo-card:nth-child(6) { animation: fadeUp 0.8s ease 0.8s both; }
+  .grid .demo-card:nth-child(7) { animation: fadeUp 0.8s ease 0.9s both; }
+  .grid .demo-card:nth-child(8) { animation: fadeUp 0.8s ease 1.0s both; }
+  .grid .demo-card:nth-child(9) { animation: fadeUp 0.8s ease 1.1s both; }
+  .grid .demo-card:nth-child(10) { animation: fadeUp 0.8s ease 1.2s both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 500px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 1.5rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Showcase</h1>
+    <p>Demos & intellectual property</p>
+  </div>
+
+  <div class="grid">
+    <a href="coaching-landing.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Coaching Landing Page</div>
+      <div class="desc">SEO-optimized landing page for executive coaching services</div>
+    </a>
+
+    <a href="solopreneur-journey.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Solopreneur Journey</div>
+      <div class="desc">A solopreneur's path to augmenting their workflow with AI</div>
+    </a>
+
+    <a href="anchor-demo.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Anchor Demo</div>
+      <div class="desc">Demo version of The Anchor dashboard</div>
+    </a>
+
+    <a href="mood-tracker.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Mood Tracker</div>
+      <div class="desc">Daily mood tracking with streak counter</div>
+    </a>
+
+    <a href="good-girl.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Good Girl App</div>
+      <div class="desc">Ritual tracker and reward system</div>
+    </a>
+
+    <a href="daddy-dom.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Daddy Dom App</div>
+      <div class="desc">Structured care and accountability tracker</div>
+    </a>
+
+    <a href="lover.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Lover App</div>
+      <div class="desc">Relationship presence and connection tracker</div>
+    </a>
+
+    <a href="magician.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Magician App</div>
+      <div class="desc">Transformation and creative energy tracker</div>
+    </a>
+
+    <a href="warriors.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">Warriors App</div>
+      <div class="desc">Discipline and warrior archetype tracker</div>
+    </a>
+
+    <a href="king.html" class="demo-card">
+      <span class="arrow">→</span>
+      <div class="title">King App</div>
+      <div class="desc">Sovereignty and daily ritual tracker</div>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

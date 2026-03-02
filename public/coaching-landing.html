@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transform Your Life with Professional Coaching | Life & Career Coach</title>
+    <meta name="description" content="Unlock your potential with personalized life and career coaching. Book your free consultation today and start your transformation journey.">
+    <meta name="keywords" content="life coach, career coach, personal development, professional coaching, transformation, leadership coaching">
+    <meta property="og:title" content="Transform Your Life with Professional Coaching">
+    <meta property="og:description" content="Unlock your potential with personalized life and career coaching. Book your free consultation today.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/hero-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Transform Your Life with Professional Coaching">
+    <meta name="twitter:description" content="Unlock your potential with personalized coaching.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Professional Coaching Services",
+      "description": "Life and career coaching services to help individuals unlock their potential",
+      "serviceType": "Life Coaching",
+      "provider": {
+        "@type": "Person",
+        "name": "Professional Coach"
+      }
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --sage-green: #8FBC8F;
+            --terracotta: #E07A5F;
+            --cream: #F4F3EE;
+            --charcoal: #2F3E46;
+            --white: #FFFFFF;
+            --gray-100: #F5F5F5;
+            --gray-300: #D1D5DB;
+            --gray-600: #6B7280;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--charcoal);
+            background-color: var(--cream);
+        }
+        
+        .font-serif {
+            font-family: 'Lora', serif;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(47, 62, 70, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sage-green);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--sage-green);
+        }
+        
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        
+        .hamburger {
+            width: 25px;
+            height: 3px;
+            background: var(--charcoal);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            line-height: 1.4;
+        }
+        
+        .btn-primary {
+            background: var(--sage-green);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: #7AA87A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(143, 188, 143, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--terracotta);
+            color: var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background: #D16A55;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(224, 122, 95, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--sage-green);
+            border: 2px solid var(--sage-green);
+        }
+        
+        .btn-outline:hover {
+            background: var(--sage-green);
+            color: var(--white);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--sage-green), #7AA87A);
+            color: var(--white);
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="grain" width="100" height="20" patternUnits="userSpaceOnUse"><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-cta {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .section.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--charcoal);
+        }
+        
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Problem Section */
+        .problem {
+            background: var(--white);
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .problem-card {
+            background: var(--gray-100);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .problem-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+        
+        /* About Section */
+        .about {
+            background: var(--cream);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-image {
+            width: 100%;
+            height: 400px;
+            background: var(--gray-300);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+            font-size: 1.125rem;
+        }
+        
+        .credentials {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .credential {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(47, 62, 70, 0.05);
+        }
+        
+        /* Services Section */
+        .services {
+            background: var(--white);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background: var(--cream);
+            padding: 2.5rem;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(47, 62, 70, 0.05);
+            position: relative;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(47, 62, 70, 0.15);
+        }
+        
+        .service-card.featured {
+            border: 3px solid var(--sage-green);
+            transform: scale(1.05);
+        }
+        
+        .service-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--sage-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .service-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .service-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-300);
+        }
+        
+        .service-features li:before {
+            content: '✓';
+            color: var(--sage-green);
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            background: var(--sage-green);
+            color: var(--white);
+        }
+        
+        .testimonials-carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .testimonial {
+            background: var(--white);
+            color: var(--charcoal);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 0 1rem;
+            box-shadow: 0 8px 30px rgba(47, 62, 70, 0.1);
+        }
+        
+        .testimonial-text {
+            font-size: 1.125rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--sage-green);
+        }
+        
+        /* Process Section */
+        .process {
+            background: var(--white);
+        }
+        
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--terracotta);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+        
+        /* FAQ Section */
+        .faq {
+            background: var(--cream);
+        }
+        
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            background: var(--white);
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 200px;
+        }
+        
+        /* Contact Form */
+        .contact {
+            background: var(--white);
+        }
+        
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .contact-form {
+            background: var(--cream);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--sage-green);
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: var(--white);
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        
+        .social-links a {
+            color: var(--white);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--sage-green);
+        }
+        
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--sage-green);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            background: #7AA87A;
+            transform: translateY(-3px);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 4px 20px rgba(47, 62, 70, 0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .service-card.featured {
+                transform: none;
+            }
+            
+            .credentials {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .btn {
+                padding: 10px 24px;
+                font-size: 0.9rem;
+            }
+            
+            .service-card,
+            .testimonial {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">CoachPro</a>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="mobile-menu">
+                    <div class="hamburger"></div>
+                    <div class="hamburger"></div>
+                    <div class="hamburger"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Transform Your Life & Unlock Your True Potential</h1>
+                    <p class="subtitle">Break through limiting beliefs, achieve your goals, and create the life you've always dreamed of with personalized coaching that gets results.</p>
+                    <div class="hero-cta">
+                        <a href="#contact" class="btn btn-primary">Book Free Consultation</a>
+                        <a href="#services" class="btn btn-outline">View Services</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section problem">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Are You Struggling With These Challenges?</h2>
+                    <p>Many successful people face these common obstacles that prevent them from reaching their full potential.</p>
+                </div>
+                <div class="problem-grid">
+                    <div class="problem-card">
+                        <div class="problem-icon">😔</div>
+                        <h3>Feeling Stuck</h3>
+                        <p>You know you're capable of more but feel trapped in your current situation with no clear path forward.</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">⚖️</div>
+                        <h3>Work-Life Imbalance</h3>
+                        <p>Struggling to juggle career demands while maintaining relationships and personal well-being.</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">🎯</div>
+                        <h3>Lack of Direction</h3>
+                        <p>Unsure about your life purpose or career direction, feeling lost and overwhelmed by choices.</p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">💭</div>
+                        <h3>Self-Doubt</h3>
+                        <p>Impostor syndrome and limiting beliefs holding you back from taking action and pursuing your dreams.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-image">
+                        Professional Coach Photo
+                    </div>
+                    <div class="about-text">
+                        <h2 class="font-serif">Meet Your Transformation Partner</h2>
+                        <p>With over 10 years of experience in life and career coaching, I've helped hundreds of professionals break through barriers and achieve extraordinary results. My approach combines proven psychological principles with practical strategies tailored to your unique situation.</p>
+                        <p>I believe everyone has untapped potential waiting to be unleashed. My mission is to guide you on a journey of self-discovery and empowerment, helping you create lasting change that impacts every area of your life.</p>
+                        <div class="credentials">
+                            <div class="credential">
+                                <strong>ICF Certified</strong>
+                                <p>Professional Coach</p>
+                            </div>
+                            <div class="credential">
+                                <strong>500+</strong>
+                                <p>Clients Transformed</p>
+                            </div>
+                            <div class="credential">
+                                <strong>MBA</strong>
+                                <p>Business Psychology</p>
+                            </div>
+                            <div class="credential">
+                                <strong>10+ Years</strong>
+                                <p>Experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="section services">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Coaching Programs Designed for Results</h2>
+                    <p>Choose the program that best fits your goals and commitment level. All programs include personalized attention and proven frameworks.</p>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Breakthrough Session</h3>
+                        <div class="service-price">$297</div>
+                        <p>Perfect for gaining clarity and momentum</p>
+                        <ul class="service-features">
+                            <li>2-hour intensive session</li>
+                            <li>Goal clarity & action plan</li>
+                            <li>Obstacle identification</li>
+                            <li>Resource recommendations</li>
+                            <li>Email follow-up support</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary">Get Started</a>
+                    </div>
+                    <div class="service-card featured">
+                        <h3>Transformation Program</h3>
+                        <div class="service-price">$1,997</div>
+                        <p>Most Popular - Complete life transformation</p>
+                        <ul class="service-features">
+                            <li>12 weekly coaching sessions</li>
+                            <li>Personalized action plans</li>
+                            <li>Unlimited email support</li>
+                            <li>Progress tracking tools</li>
+                            <li>Bonus: Goal setting workshop</li>
+                            <li>Money-back guarantee</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Transform Now</a>
+                    </div>
+                    <div class="service-card">
+                        <h3>Executive Coaching</h3>
+                        <div class="service-price">$4,997</div>
+                        <p>Premium program for senior leaders</p>
+                        <ul class="service-features">
+                            <li>24 bi-weekly sessions (6 months)</li>
+                            <li>Leadership assessment</li>
+                            <li>360-degree feedback</li>
+                            <li>Custom development plan</li>
+                            <li>Quarterly progress reviews</li>
+                            <li>Ongoing email & phone support</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="section testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2>What Clients Say About Their Transformation</h2>
+                    <p>Real results from real people who took action and transformed their lives.</p>
+                </div>
+                <div class="testimonials-carousel">
+                    <div class="testimonial">
+                        <div class="testimonial-text">
+                            "Working with this coach completely changed my perspective on what's possible. I went from feeling stuck in my career to landing my dream job and increasing my salary by 60%. The techniques and mindset shifts were game-changing."
+                        </div>
+                        <div class="testimonial-author">- Sarah M., Marketing Director</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 3rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 800px; margin: 0 auto;">
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 2rem; font-weight: 700;">500+</div>
+                            <div>Lives Transformed</div>
+                        </div>
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 2rem; font-weight: 700;">95%</div>
+                            <div>Success Rate</div>
+                        </div>
+                        <div style="text-align: center; color: white;">
+                            <div style="font-size: 2rem; font-weight: 700;">4.9/5</div>
+                            <div>Client Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section process">
+            <div class="container">
+                <div class="section-header">
+                    <h2>My Proven 4-Step Coaching Process</h2>
+                    <p>A systematic approach that has helped hundreds achieve breakthrough results</p>
+                </div>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <h3>Discover</h3>
+                        <p>Deep dive into your current situation, goals, and obstacles. Uncover limiting beliefs and identify your core values and motivations.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <h3>Design</h3>
+                        <p>Create a personalized roadmap with specific, measurable goals and actionable strategies tailored to your unique situation and learning style.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <h3>Develop</h3>
+                        <p>Build new habits, skills, and mindsets through consistent practice, accountability, and continuous refinement of your approach.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <h3>Deliver</h3>
+                        <p>Achieve your transformation goals and maintain momentum with tools and strategies for continued growth and success.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Common questions about coaching and how it can help you</p>
+                </div>
+                <div class="faq-items">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How is coaching different from therapy?
+                            <span>+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Coaching focuses on your present and future, helping you achieve specific goals and overcome obstacles. While therapy often addresses past experiences and mental health issues, coaching is action-oriented and designed to help you move forward and achieve your potential.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How long does it take to see results?
+                            <span>+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Many clients report immediate insights and increased clarity after just one session. Significant behavioral changes typically occur within 6-8 weeks of consistent coaching. The timeline depends on your goals, commitment level, and willingness to take action.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do you offer a money-back guarantee?
+                            <span>+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, I offer a 30-day money-back guarantee for my Transformation Program. If you're not completely satisfied with your progress after 4 sessions, I'll refund your investment completely.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Can coaching be done virtually?
+                            <span>+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Absolutely! All coaching sessions can be conducted via video call, making it convenient regardless of your location. Virtual coaching is just as effective as in-person sessions and offers greater flexibility for busy professionals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Ready to Transform Your Life?</h2>
+                    <p>Book your free 30-minute consultation and discover how coaching can help you achieve your goals</p>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-form">
+                        <h3>Get Your Free Consultation</h3>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="goal">Primary Goal</label>
+                                <textarea id="goal" name="goal" placeholder="What would you most like to achieve through coaching?"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Book My Free Consultation</button>
+                        </form>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Why Choose Professional Coaching?</h3>
+                        <div style="margin: 2rem 0;">
+                            <div style="display: flex; align-items: center; margin: 1rem 0;">
+                                <span style="color: var(--sage-green); font-size: 1.5rem; margin-right: 1rem;">✓</span>
+                                <span>Achieve goals 2-3x faster than going alone</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin: 1rem 0;">
+                                <span style="color: var(--sage-green); font-size: 1.5rem; margin-right: 1rem;">✓</span>
+                                <span>Gain clarity on your life purpose and direction</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin: 1rem 0;">
+                                <span style="color: var(--sage-green); font-size: 1.5rem; margin-right: 1rem;">✓</span>
+                                <span>Overcome limiting beliefs and self-doubt</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin: 1rem 0;">
+                                <span style="color: var(--sage-green); font-size: 1.5rem; margin-right: 1rem;">✓</span>
+                                <span>Build confidence and decision-making skills</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin: 1rem 0;">
+                                <span style="color: var(--sage-green); font-size: 1.5rem; margin-right: 1rem;">✓</span>
+                                <span>Create work-life balance and reduce stress</span>
+                            </div>
+                        </div>
+                        <div style="background: var(--sage-green); color: white; padding: 1.5rem; border-radius: 12px; text-align: center; margin-top: 2rem;">
+                            <h4>Limited Time Offer</h4>
+                            <p>Book your consultation this week and receive a complimentary goal-setting workbook (valued at $47)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h4>CoachPro</h4>
+                    <p>Transforming lives through professional coaching</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <p><a href="#about" style="color: white; text-decoration: none;">About</a></p>
+                    <p><a href="#services" style="color: white; text-decoration: none;">Services</a></p>
+                    <p><a href="#contact" style="color: white; text-decoration: none;">Contact</a></p>
+                </div>
+                <div>
+                    <h4>Contact Info</h4>
+                    <p>hello@coachpro.com</p>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#">📘</a>
+                <a href="#">📷</a>
+                <a href="#">🐦</a>
+                <a href="#">💼</a>
+            </div>
+            <p>&copy; 2024 CoachPro. All rights reserved. | Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+
+    <a href="#home" class="back-to-top">↑</a>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const isActive = answer.classList.contains('active');
+                
+                // Close all other answers
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.classList.remove('active');
+                });
+                document.querySelectorAll('.faq-question span').forEach(span => {
+                    span.textContent = '+';
+                });
+                
+                // Toggle current answer
+                if (!isActive) {
+                    answer.classList.add('active');
+                    this.querySelector('span').textContent = '-';
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'var(--white)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                goal: formData.get('goal'),
+                timestamp: new Date().toISOString()
+            };
+            
+            // Store in localStorage (in real app, send to server)
+            let submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+            submissions.push(data);
+            localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+            
+            // Show success message
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.textContent = 'Thank You! We\'ll Be In Touch Soon';
+            btn.style.background = 'var(--sage-green)';
+            
+            // Reset form
+            this.reset();
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 3000);
+        });
+
+        // Newsletter signup (if needed)
+        function subscribeNewsletter(email) {
+            let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+            if (!subscribers.includes(email)) {
+                subscribers.push(email);
+                localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+                return true;
+            }
+            return false;
+        }
+
+        // Page load animations
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+
+        // Add loading state to body
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+    </script>
+</body>
+</html>

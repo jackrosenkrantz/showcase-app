@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Warriors App</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0d0d0f;
+    --bg-card: #15151a;
+    --bg-card-hover: #1c1c24;
+    --primary: #8a9aae;
+    --primary-soft: #c4cdd8;
+    --primary-deep: #5a6a7e;
+    --ember: #c45e3e;
+    --ember-soft: rgba(196, 94, 62, 0.15);
+    --ember-glow: rgba(196, 94, 62, 0.3);
+    --ember-glow-strong: rgba(196, 94, 62, 0.6);
+    --text: #d8d4d0;
+    --text-soft: #8a8680;
+    --text-muted: #4a4844;
+    --stone: #2a2826;
+    --stone-light: #3a3836;
+    --ash: #1a1816;
+    --skin: #c4a882;
+    --skin-shadow: #a08a6e;
+    --hair: #1a1a1e;
+    --cloth: #1a1a20;
+    --grain: rgba(196, 94, 62, 0.02);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle 2px at 12px 12px, var(--grain) 50%, transparent 50%),
+      radial-gradient(circle 2px at 28px 28px, var(--grain) 50%, transparent 50%);
+    background-size: 36px 36px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+
+  @keyframes pulse-ember {
+    0%, 100% { box-shadow: 0 0 8px var(--ember-soft); }
+    50% { box-shadow: 0 0 20px rgba(196, 94, 62, 0.4); }
+  }
+
+  @keyframes float-flame {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(0.4); }
+  }
+
+  @keyframes glow-border {
+    0%, 100% { border-color: var(--primary); box-shadow: 0 0 8px var(--ember-glow); }
+    50% { border-color: var(--primary-soft); box-shadow: 0 0 16px var(--ember-glow-strong); }
+  }
+
+  @keyframes aura-pulse {
+    0%, 100% { box-shadow: 0 0 20px transparent; }
+    50% { box-shadow: 0 0 40px var(--ember-glow); }
+  }
+
+  @keyframes aura-pulse-full {
+    0%, 100% { box-shadow: 0 0 30px var(--ember-soft); }
+    50% { box-shadow: 0 0 60px rgba(196, 94, 62, 0.35); }
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* ========== HEADER ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .header h1 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    color: var(--ember);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  .header .subtitle {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-soft);
+    margin-bottom: 0.4rem;
+  }
+
+  .header .tagline {
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ========== STREAK ========== */
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0.35rem 0.85rem;
+    background: var(--ember-soft);
+    border: 1px solid rgba(196, 94, 62, 0.2);
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ember);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .streak-badge.show { opacity: 1; }
+  .streak-badge .flame { font-size: 0.8rem; }
+
+  /* ========== AVATAR ========== */
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.25s both;
+  }
+
+  .avatar-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 11;
+    transition: color 0.4s ease;
+  }
+
+  .avatar-title.rising { color: var(--primary); }
+  .avatar-title.forged { color: var(--ember); }
+
+  .avatar-wrap {
+    position: relative;
+    width: 180px;
+    height: 280px;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    transition: box-shadow 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-wrap.aura-1 { animation: aura-pulse 3s ease-in-out infinite; }
+  .avatar-wrap.aura-2 { animation: aura-pulse 2.5s ease-in-out infinite; }
+  .avatar-wrap.aura-3 { animation: aura-pulse 2s ease-in-out infinite; }
+  .avatar-wrap.aura-4 { animation: aura-pulse-full 2s ease-in-out infinite; }
+
+  .avatar-figure {
+    position: relative;
+    width: 160px;
+    height: 260px;
+  }
+
+  /* Fire pit (always visible) */
+  .fire-pit {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 20px;
+    background: #1a1210;
+    border-radius: 50%;
+    z-index: 0;
+    border: 1px solid #2a2018;
+  }
+
+  /* Fire pit stones */
+  .fire-pit::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -4px;
+    right: -4px;
+    height: 10px;
+    background: var(--stone);
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  /* Embers in fire (hidden by default) */
+  .fire-embers {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 30px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .fire-embers.show { opacity: 1; }
+
+  .ember-core {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 14px;
+    background: var(--ember);
+    border-radius: 50% 50% 40% 40%;
+    animation: breathe 2s ease-in-out infinite;
+  }
+
+  .ember-glow-left, .ember-glow-right {
+    position: absolute;
+    bottom: 2px;
+    width: 10px;
+    height: 10px;
+    background: rgba(196, 94, 62, 0.5);
+    border-radius: 50%;
+    animation: breathe 2.5s ease-in-out infinite;
+  }
+
+  .ember-glow-left { left: 2px; animation-delay: 0.3s; }
+  .ember-glow-right { right: 2px; animation-delay: 0.7s; }
+
+  /* Head */
+  .avatar-head {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 48px;
+    background: var(--skin);
+    border-radius: 50% 50% 45% 45%;
+    z-index: 4;
+  }
+
+  /* Hair */
+  .avatar-hair {
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 26px;
+    background: var(--hair);
+    border-radius: 50% 50% 30% 30%;
+    z-index: 5;
+  }
+
+  /* Headband (hidden by default) */
+  .avatar-headband {
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 50px;
+    height: 6px;
+    background: var(--ember);
+    border-radius: 3px;
+    z-index: 6;
+    transition: transform 0.4s ease;
+  }
+
+  .avatar-headband.show { transform: translateX(-50%) scaleX(1); }
+
+  .headband-tail-left, .headband-tail-right {
+    position: absolute;
+    top: 100%;
+    width: 3px;
+    height: 16px;
+    background: var(--ember);
+    border-radius: 0 0 2px 2px;
+  }
+
+  .headband-tail-left { left: 2px; transform: rotate(-8deg); }
+  .headband-tail-right { right: 2px; transform: rotate(8deg); }
+
+  /* Neck */
+  .avatar-neck {
+    position: absolute;
+    top: 84px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 14px;
+    background: var(--skin);
+    z-index: 3;
+  }
+
+  /* Torso */
+  .avatar-torso {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 70px;
+    background: var(--cloth);
+    border-radius: 6px 6px 2px 2px;
+    z-index: 3;
+    transition: all 0.4s ease;
+    border: 1px solid #2a2a30;
+  }
+
+  /* V-neck */
+  .avatar-torso::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 16px solid var(--skin);
+  }
+
+  /* War paint / chest marks (hidden by default) */
+  .avatar-warpaint {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 72px;
+    z-index: 4;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .avatar-warpaint.show { opacity: 1; }
+
+  .warpaint-line-1 {
+    position: absolute;
+    top: 20px;
+    left: 12px;
+    width: 48px;
+    height: 3px;
+    background: var(--ember);
+    transform: rotate(-8deg);
+    border-radius: 2px;
+    opacity: 0.7;
+  }
+
+  .warpaint-line-2 {
+    position: absolute;
+    top: 32px;
+    left: 16px;
+    width: 40px;
+    height: 2px;
+    background: var(--ember);
+    transform: rotate(5deg);
+    border-radius: 2px;
+    opacity: 0.5;
+  }
+
+  .warpaint-line-3 {
+    position: absolute;
+    top: 44px;
+    left: 20px;
+    width: 32px;
+    height: 3px;
+    background: var(--ember);
+    transform: rotate(-3deg);
+    border-radius: 2px;
+    opacity: 0.6;
+  }
+
+  /* Cloak (hidden by default) */
+  .avatar-cloak {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 120px;
+    background: linear-gradient(180deg, #1a1a24 0%, #0d0d14 100%);
+    border-radius: 0 0 40px 40px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border: 1px solid #2a2a34;
+  }
+
+  .avatar-cloak.show { opacity: 1; }
+
+  .avatar-cloak::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    height: 3px;
+    background: var(--ember);
+    border-radius: 2px;
+    opacity: 0.2;
+  }
+
+  /* Arms */
+  .avatar-arm-left, .avatar-arm-right {
+    position: absolute;
+    top: 100px;
+    width: 16px;
+    height: 50px;
+    background: var(--skin);
+    border-radius: 8px;
+    z-index: 2;
+  }
+
+  .avatar-arm-left { left: 26px; transform: rotate(6deg); }
+  .avatar-arm-right { right: 26px; transform: rotate(-6deg); }
+
+  /* Arm wraps (hidden by default) */
+  .avatar-armwrap-left, .avatar-armwrap-right {
+    position: absolute;
+    top: 110px;
+    width: 18px;
+    height: 30px;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.1s;
+  }
+
+  .avatar-armwrap-left { left: 25px; }
+  .avatar-armwrap-right { right: 25px; }
+  .avatar-armwrap-left.show, .avatar-armwrap-right.show { opacity: 1; }
+
+  .armwrap-band {
+    width: 100%;
+    height: 3px;
+    background: var(--stone-light);
+    margin-bottom: 4px;
+    border-radius: 1px;
+  }
+
+  /* Legs */
+  .avatar-legs {
+    position: absolute;
+    top: 164px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+  }
+
+  .avatar-leg-left, .avatar-leg-right {
+    position: absolute;
+    width: 18px;
+    height: 55px;
+    background: var(--cloth);
+    border-radius: 4px;
+    border: 1px solid #2a2a30;
+  }
+
+  .avatar-leg-left { left: -22px; }
+  .avatar-leg-right { left: 4px; }
+
+  /* Boots */
+  .avatar-boot-left, .avatar-boot-right {
+    position: absolute;
+    top: 50px;
+    width: 22px;
+    height: 12px;
+    background: #1a1210;
+    border-radius: 2px 6px 6px 2px;
+  }
+
+  .avatar-boot-left { left: -24px; }
+  .avatar-boot-right { left: 2px; border-radius: 6px 2px 2px 6px; }
+
+  /* Staff (hidden by default) */
+  .avatar-staff {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-staff.show { opacity: 1; }
+
+  .staff-shaft {
+    width: 5px;
+    height: 130px;
+    background: linear-gradient(180deg, #5a4a3a 0%, #3a2a1a 100%);
+    margin: 0 auto;
+    border-radius: 3px;
+  }
+
+  .staff-wrap-1, .staff-wrap-2, .staff-wrap-3 {
+    position: absolute;
+    left: 0;
+    width: 5px;
+    height: 4px;
+    background: var(--stone-light);
+    border-radius: 1px;
+  }
+
+  .staff-wrap-1 { top: 8px; }
+  .staff-wrap-2 { top: 20px; }
+  .staff-wrap-3 { top: 32px; }
+
+  .staff-stone {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: var(--ember);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--ember-glow);
+  }
+
+  /* Sparkles */
+  .avatar-sparkles {
+    position: absolute;
+    inset: -20px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .avatar-sparkles.show { opacity: 1; }
+
+  .avatar-sparkles span {
+    position: absolute;
+    font-size: 0.7rem;
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+
+  .avatar-sparkles span:nth-child(1) { top: 8%; left: 5%; animation-delay: 0s; }
+  .avatar-sparkles span:nth-child(2) { top: 5%; right: 8%; animation-delay: 0.3s; }
+  .avatar-sparkles span:nth-child(3) { top: 40%; left: 0; animation-delay: 0.6s; }
+  .avatar-sparkles span:nth-child(4) { top: 35%; right: 0; animation-delay: 0.9s; }
+  .avatar-sparkles span:nth-child(5) { bottom: 25%; left: 8%; animation-delay: 0.4s; }
+  .avatar-sparkles span:nth-child(6) { bottom: 20%; right: 5%; animation-delay: 0.7s; }
+
+  /* Reward text */
+  .avatar-reward-text {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ember);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s ease;
+    text-align: center;
+    min-height: 1.5em;
+  }
+
+  .avatar-reward-text.show { opacity: 1; transform: translateY(0); }
+  .avatar-reward-text.tier { color: var(--text-soft); font-size: 0.95rem; }
+
+  /* ========== PRACTICES ========== */
+  .practices-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .practices-header {
+    font-family: 'Lora', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .practices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .practices-grid { grid-template-columns: 1fr; }
+  }
+
+  .practice-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--text-muted);
+    border-radius: 14px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .practice-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-soft);
+  }
+
+  .practice-card.checked {
+    border-color: var(--primary);
+    animation: glow-border 2s ease-in-out infinite;
+  }
+
+  .practice-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .practice-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    margin-top: 1px;
+  }
+
+  .practice-checkbox .check-icon {
+    opacity: 0;
+    color: var(--bg);
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease;
+  }
+
+  .practice-card.checked .practice-checkbox {
+    background: var(--ember);
+    border-color: var(--ember);
+    box-shadow: 0 0 8px var(--ember-glow);
+  }
+
+  .practice-card.checked .practice-checkbox .check-icon { opacity: 1; }
+
+  .practice-name {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    transition: all 0.3s ease;
+    line-height: 1.4;
+  }
+
+  .practice-card.checked .practice-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--ember);
+    color: var(--text-soft);
+  }
+
+  .practice-desc {
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: 2.15rem;
+    transition: color 0.3s ease;
+  }
+
+  .practice-card.checked .practice-desc { color: var(--text-soft); }
+
+  .practice-affirm {
+    margin-left: 2.15rem;
+    margin-top: 0.5rem;
+    font-family: 'Lora', serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--ember);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.4s ease;
+  }
+
+  .practice-card.checked .practice-affirm { opacity: 1; transform: translateY(0); }
+
+  .flame-float {
+    position: absolute;
+    font-size: 0.85rem;
+    pointer-events: none;
+    animation: float-flame 1s ease-out forwards;
+  }
+
+  /* ========== PROGRESS ========== */
+  .progress-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.55s both;
+  }
+
+  .progress-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 10px;
+    background: rgba(196, 94, 62, 0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--stone) 0%, var(--ember) 100%);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .progress-bar-fill.full {
+    animation: pulse-ember 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--ember) 0%, #e87a5a 100%);
+  }
+
+  .progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-soft);
+    transition: all 0.3s ease;
+  }
+
+  .progress-text.complete {
+    color: var(--ember);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  /* ========== JOURNAL ========== */
+  .journal-section { margin-bottom: 2.5rem; animation: fadeUp 0.5s ease both; text-align: center; }
+  .journal-section.hidden { display: none; }
+
+  .journal-prompt {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--ember);
+    margin-bottom: 0.75rem;
+  }
+
+  .journal-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--primary-soft);
+    background: var(--bg-card);
+    border: 1px solid var(--text-muted);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 3.5em;
+    transition: border-color 0.3s ease;
+  }
+
+  .journal-input::placeholder { color: var(--text-muted); font-style: italic; }
+  .journal-input:focus { border-color: var(--ember); }
+
+  .journal-save-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .journal-save-btn:hover { color: var(--ember); border-color: var(--ember); }
+  .journal-save-btn.saved { color: var(--ember); border-color: var(--ember); cursor: default; }
+
+  /* ========== RESET ========== */
+  .reset-section { text-align: center; animation: fadeUp 0.8s ease 0.7s both; }
+
+  .reset-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .reset-btn:hover { color: var(--ember); border-color: var(--ember); }
+
+  /* ========== MODAL ========== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(13, 13, 15, 0.9); backdrop-filter: blur(6px);
+    z-index: 100; align-items: center; justify-content: center; padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-card); border: 1px solid var(--text-muted);
+    border-radius: 18px; padding: 2.5rem; max-width: 360px; width: 100%; text-align: center;
+  }
+
+  .modal p {
+    font-family: 'Lora', serif; font-size: 1rem; font-style: italic;
+    color: var(--primary-soft); margin-bottom: 1.5rem; line-height: 1.6;
+  }
+
+  .modal-btns { display: flex; gap: 0.75rem; justify-content: center; }
+
+  .modal-btn {
+    font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 0.6rem 1.3rem;
+    border-radius: 100px; cursor: pointer; transition: all 0.25s ease;
+  }
+
+  .modal-btn.confirm { background: var(--ember); color: var(--bg); border: none; }
+  .modal-btn.confirm:hover { background: #d87050; }
+  .modal-btn.cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted); }
+  .modal-btn.cancel:hover { color: var(--text-soft); border-color: var(--text-soft); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>The Warriors App</h1>
+    <div class="subtitle">You don't need to be fixed. You need to be forged.</div>
+    <div class="tagline">Show up. Do the work. Let the fire do the rest.</div>
+    <div class="streak-badge" id="streakBadge">
+      <span class="flame">🔥</span>
+      <span id="streakText">Day 1 streak</span>
+    </div>
+  </div>
+
+  <div class="avatar-section">
+    <div class="avatar-title" id="avatarTitle">Initiate</div>
+    <div class="avatar-wrap" id="avatarWrap">
+      <div class="avatar-figure">
+        <!-- Fire pit -->
+        <div class="fire-pit"></div>
+        <div class="fire-embers" id="fireEmbers">
+          <div class="ember-core"></div>
+          <div class="ember-glow-left"></div>
+          <div class="ember-glow-right"></div>
+        </div>
+        <!-- Cloak -->
+        <div class="avatar-cloak" id="avatarCloak"></div>
+        <!-- Hair & Headband -->
+        <div class="avatar-hair"></div>
+        <div class="avatar-headband" id="avatarHeadband">
+          <div class="headband-tail-left"></div>
+          <div class="headband-tail-right"></div>
+        </div>
+        <!-- Head & Neck -->
+        <div class="avatar-head"></div>
+        <div class="avatar-neck"></div>
+        <!-- Arms -->
+        <div class="avatar-arm-left"></div>
+        <div class="avatar-arm-right"></div>
+        <!-- Arm wraps -->
+        <div class="avatar-armwrap-left" id="avatarArmwrapL">
+          <div class="armwrap-band"></div>
+          <div class="armwrap-band"></div>
+          <div class="armwrap-band"></div>
+          <div class="armwrap-band"></div>
+        </div>
+        <div class="avatar-armwrap-right" id="avatarArmwrapR">
+          <div class="armwrap-band"></div>
+          <div class="armwrap-band"></div>
+          <div class="armwrap-band"></div>
+          <div class="armwrap-band"></div>
+        </div>
+        <!-- Torso & War paint -->
+        <div class="avatar-torso"></div>
+        <div class="avatar-warpaint" id="avatarWarpaint">
+          <div class="warpaint-line-1"></div>
+          <div class="warpaint-line-2"></div>
+          <div class="warpaint-line-3"></div>
+        </div>
+        <!-- Staff -->
+        <div class="avatar-staff" id="avatarStaff">
+          <div class="staff-shaft"></div>
+          <div class="staff-wrap-1"></div>
+          <div class="staff-wrap-2"></div>
+          <div class="staff-wrap-3"></div>
+          <div class="staff-stone"></div>
+        </div>
+        <!-- Legs -->
+        <div class="avatar-legs">
+          <div class="avatar-leg-left"></div>
+          <div class="avatar-leg-right"></div>
+          <div class="avatar-boot-left"></div>
+          <div class="avatar-boot-right"></div>
+        </div>
+        <!-- Sparkles -->
+        <div class="avatar-sparkles" id="avatarSparkles">
+          <span>✦</span><span>✦</span><span>✦</span>
+          <span>✦</span><span>✦</span><span>✦</span>
+        </div>
+      </div>
+    </div>
+    <div class="avatar-reward-text" id="avatarRewardText"></div>
+  </div>
+
+  <div class="practices-section">
+    <div class="practices-header">Today's Practice</div>
+    <div class="practices-grid" id="practicesGrid"></div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-label">Today's ground covered:</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 of 4 practices complete</div>
+  </div>
+
+  <div class="journal-section hidden" id="journalSection">
+    <div class="journal-prompt" id="journalPrompt">What did you carry today that wasn't yours?</div>
+    <textarea class="journal-input" id="journalInput" placeholder="Write it down. Let the fire hold it." rows="3"></textarea>
+    <br>
+    <button class="journal-save-btn" id="journalSaveBtn" onclick="saveJournal()">Burn it into the record</button>
+  </div>
+
+  <div class="reset-section">
+    <button class="reset-btn" onclick="showResetModal()">Begin Again</button>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <p>The fire doesn't judge yesterday.<br>Ready to sit with it again?</p>
+    <div class="modal-btns">
+      <button class="modal-btn confirm" onclick="confirmReset()">Light it</button>
+      <button class="modal-btn cancel" onclick="closeResetModal()">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PRACTICES = [
+    { key: 'body', name: 'Move the Body', desc: 'Not performance. Presence. You showed up for your body today.' },
+    { key: 'truth', name: 'Speak a Truth', desc: 'Out loud, on paper, to someone. One honest thing you\'ve been holding.' },
+    { key: 'stillness', name: 'Sit in Stillness', desc: 'Meditation, breath, silence. Not escape — arrival.' },
+    { key: 'tend', name: 'Tend Something', desc: 'A relationship. A project. A wound. Softness is not weakness — it\'s strategy.' }
+  ];
+
+  const PRAISE_POOL = [
+    'That counted.', 'Noted by the fire.', 'Warrior move.', 'You showed up.',
+    'Honest work.', 'Discipline of presence.', 'Ground held.', 'The hard thing, done.',
+    'No one saw. It still mattered.', 'Real.'
+  ];
+
+  const TIER_MESSAGES = [
+    '',
+    'One foot in front of the other.',
+    'Halfway through the hard part.',
+    'Almost there. Don\'t quit now.',
+    ''
+  ];
+
+  const FULL_PRAISE = [
+    'All four. The fire burns bright.',
+    'Nothing skipped. Nothing faked. This is the work.',
+    'You did what most won\'t. That\'s why you\'re here.',
+    'Full practice. The warrior rests now.',
+    'Every one. Not because it was easy.'
+  ];
+
+  const JOURNAL_PROMPTS = [
+    'What did you carry today that wasn\'t yours?',
+    'Where did you choose courage over comfort?',
+    'What would you tell yourself at the start of this day?',
+    'What needs to be put down before tomorrow?',
+    'What\'s one thing that\'s true right now?'
+  ];
+
+  const TITLES = [
+    { min: 0, label: 'Initiate', css: '' },
+    { min: 3, label: 'Ember', css: 'rising' },
+    { min: 7, label: 'Warrior', css: 'rising' },
+    { min: 14, label: 'Keeper', css: 'rising' },
+    { min: 21, label: 'Firebrand', css: 'forged' },
+    { min: 30, label: 'Forged', css: 'forged' }
+  ];
+
+  function getTitle(streak) {
+    let title = TITLES[0];
+    for (const t of TITLES) { if (streak >= t.min) title = t; }
+    return title;
+  }
+
+  function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function dayKey() { return new Date().toISOString().slice(0, 10); }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem('warriors-practices');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data.checked || {};
+    } catch { return {}; }
+  }
+
+  function saveState(checked) {
+    localStorage.setItem('warriors-practices', JSON.stringify({ date: dayKey(), checked }));
+  }
+
+  function loadStreak() {
+    try {
+      const raw = localStorage.getItem('warriors-streak');
+      if (!raw) return { count: 0, lastDate: null };
+      return JSON.parse(raw);
+    } catch { return { count: 0, lastDate: null }; }
+  }
+
+  function saveStreak(s) { localStorage.setItem('warriors-streak', JSON.stringify(s)); }
+
+  function loadJournal() {
+    try {
+      const raw = localStorage.getItem('warriors-journal');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data;
+    } catch { return {}; }
+  }
+
+  function saveJournalEntry(text) {
+    const entries = JSON.parse(localStorage.getItem('warriors-journal-history') || '[]');
+    entries.push({ date: dayKey(), text, timestamp: new Date().toISOString() });
+    localStorage.setItem('warriors-journal-history', JSON.stringify(entries));
+    localStorage.setItem('warriors-journal', JSON.stringify({ date: dayKey(), text, saved: true }));
+  }
+
+  let state = loadState();
+  let praisePicks = {};
+  PRACTICES.forEach(d => { praisePicks[d.key] = randomFrom(PRAISE_POOL); });
+
+  function updateStreak() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    if (count < 4) return;
+    const streak = loadStreak();
+    const today = dayKey();
+    if (streak.lastDate === today) return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = yesterday.toISOString().slice(0, 10);
+    if (streak.lastDate === yesterdayKey) { streak.count += 1; }
+    else if (streak.lastDate !== today) { streak.count = 1; }
+    streak.lastDate = today;
+    saveStreak(streak);
+  }
+
+  function renderPractices() {
+    const grid = document.getElementById('practicesGrid');
+    grid.innerHTML = PRACTICES.map(d => {
+      const isChecked = state[d.key] ? ' checked' : '';
+      const praise = praisePicks[d.key] || 'That counted.';
+      return '<div class="practice-card' + isChecked + '" data-key="' + d.key + '" onclick="togglePractice(\'' + d.key + '\', this)">' +
+        '<div class="practice-card-top">' +
+          '<div class="practice-checkbox"><span class="check-icon">✓</span></div>' +
+          '<div class="practice-name">' + d.name + '</div>' +
+        '</div>' +
+        '<div class="practice-desc">' + d.desc + '</div>' +
+        '<div class="practice-affirm">' + praise + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function togglePractice(key, card) {
+    state[key] = !state[key];
+    saveState(state);
+    if (state[key]) {
+      praisePicks[key] = randomFrom(PRAISE_POOL);
+      spawnFlame(card);
+    }
+    updateStreak();
+    renderAll();
+  }
+
+  function spawnFlame(card) {
+    const el = document.createElement('span');
+    el.className = 'flame-float';
+    el.textContent = '🔥';
+    el.style.left = (Math.random() * 60 + 20) + '%';
+    el.style.bottom = '20%';
+    card.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+
+  function renderAvatar() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const streak = loadStreak();
+    const title = getTitle(streak.count);
+
+    document.getElementById('avatarTitle').textContent = title.label;
+    document.getElementById('avatarTitle').className = 'avatar-title' + (title.css ? ' ' + title.css : '');
+
+    const wrap = document.getElementById('avatarWrap');
+    wrap.classList.remove('aura-1', 'aura-2', 'aura-3', 'aura-4');
+    if (count > 0) wrap.classList.add('aura-' + Math.min(count, 4));
+
+    const headband = document.getElementById('avatarHeadband');
+    const cloak = document.getElementById('avatarCloak');
+    const staff = document.getElementById('avatarStaff');
+    const warpaint = document.getElementById('avatarWarpaint');
+    const armwrapL = document.getElementById('avatarArmwrapL');
+    const armwrapR = document.getElementById('avatarArmwrapR');
+    const embers = document.getElementById('fireEmbers');
+    const sparkles = document.getElementById('avatarSparkles');
+    const rewardText = document.getElementById('avatarRewardText');
+
+    headband.classList.remove('show');
+    cloak.classList.remove('show');
+    staff.classList.remove('show');
+    warpaint.classList.remove('show');
+    armwrapL.classList.remove('show');
+    armwrapR.classList.remove('show');
+    embers.classList.remove('show');
+    sparkles.classList.remove('show');
+    rewardText.classList.remove('show', 'tier');
+
+    // 1 practice: headband — you've committed
+    if (count >= 1) headband.classList.add('show');
+    // 2 practices: cloak — you're protected by discipline
+    if (count >= 2) cloak.classList.add('show');
+    // 3 practices: staff — you carry wisdom
+    if (count >= 3) staff.classList.add('show');
+
+    // 4 practices: full warrior — war paint, arm wraps, fire lit, sparkles
+    if (count >= 4) {
+      warpaint.classList.add('show');
+      armwrapL.classList.add('show');
+      armwrapR.classList.add('show');
+      embers.classList.add('show');
+      sparkles.classList.add('show');
+      rewardText.textContent = randomFrom(FULL_PRAISE);
+      rewardText.classList.add('show');
+    } else if (count > 0) {
+      embers.classList.add('show');
+      rewardText.textContent = TIER_MESSAGES[count];
+      rewardText.classList.add('show', 'tier');
+    }
+  }
+
+  function renderProgress() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    fill.style.width = (count / 4 * 100) + '%';
+    if (count === 4) {
+      fill.classList.add('full');
+      text.className = 'progress-text complete';
+      text.textContent = 'Full practice. The fire remembers.';
+    } else {
+      fill.classList.remove('full');
+      text.className = 'progress-text';
+      text.textContent = count + ' of 4 practices complete';
+    }
+  }
+
+  function renderStreak() {
+    const streak = loadStreak();
+    const badge = document.getElementById('streakBadge');
+    const text = document.getElementById('streakText');
+    if (streak.count > 0) {
+      badge.classList.add('show');
+      text.textContent = 'Day ' + streak.count + ' streak';
+    } else { badge.classList.remove('show'); }
+  }
+
+  function renderJournal() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const section = document.getElementById('journalSection');
+    const saved = loadJournal();
+    if (count === 4) {
+      section.classList.remove('hidden');
+      document.getElementById('journalPrompt').textContent = randomFrom(JOURNAL_PROMPTS);
+      if (saved.saved) {
+        document.getElementById('journalInput').value = saved.text || '';
+        document.getElementById('journalSaveBtn').textContent = 'Burned 🔥';
+        document.getElementById('journalSaveBtn').classList.add('saved');
+      }
+    } else { section.classList.add('hidden'); }
+  }
+
+  function saveJournal() {
+    const text = document.getElementById('journalInput').value.trim();
+    if (!text) return;
+    saveJournalEntry(text);
+    const btn = document.getElementById('journalSaveBtn');
+    btn.textContent = 'Burned 🔥';
+    btn.classList.add('saved');
+  }
+
+  function renderAll() { renderPractices(); renderAvatar(); renderProgress(); renderStreak(); renderJournal(); }
+
+  function showResetModal() { document.getElementById('resetModal').classList.add('open'); }
+  function closeResetModal() { document.getElementById('resetModal').classList.remove('open'); }
+
+  function confirmReset() {
+    state = {};
+    saveState(state);
+    praisePicks = {};
+    PRACTICES.forEach(d => { praisePicks[d.key] = randomFrom(PRAISE_POOL); });
+    renderAll();
+    closeResetModal();
+  }
+
+  document.getElementById('resetModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeResetModal();
+  });
+
+  renderAll();
+
+  window.addEventListener('focus', () => {
+    const fresh = loadState();
+    if (Object.keys(fresh).length === 0 && Object.keys(state).length > 0) {
+      state = fresh;
+      renderAll();
+    }
+  });
+</script>
+
+</body>
+</html>

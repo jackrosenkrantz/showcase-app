@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sage: #87a96b;
+            --forest: #5a7c65;
+            --cream: #f5f3f0;
+            --terracotta: #d4a574;
+            --stone: #8b8680;
+            --charcoal: #2c2c2c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f0ede8 100%);
+            color: var(--charcoal);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-family: 'Lora', serif;
+            font-size: 2.5rem;
+            color: var(--forest);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--stone);
+            font-size: 1.1rem;
+        }
+
+        .streak-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .streak-number {
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--sage);
+            margin-bottom: 0.5rem;
+        }
+
+        .streak-label {
+            color: var(--stone);
+            font-size: 1.1rem;
+        }
+
+        .mood-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .mood-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .mood-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .mood-btn {
+            background: var(--cream);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mood-btn:hover {
+            border-color: var(--sage);
+            transform: translateY(-2px);
+        }
+
+        .mood-btn.selected {
+            border-color: var(--sage);
+            background: white;
+            box-shadow: 0 4px 12px rgba(135, 169, 107, 0.2);
+        }
+
+        .mood-emoji {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .mood-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--stone);
+        }
+
+        .notes-section {
+            margin-bottom: 2rem;
+        }
+
+        .notes-label {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .notes-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--cream);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: var(--sage);
+        }
+
+        .save-btn {
+            background: var(--sage);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background: var(--forest);
+            transform: translateY(-2px);
+        }
+
+        .save-btn:disabled {
+            background: var(--stone);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .history-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: var(--cream);
+        }
+
+        .history-date {
+            font-weight: 500;
+        }
+
+        .history-mood {
+            font-size: 1.5rem;
+        }
+
+        .already-logged {
+            background: var(--terracotta);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .mood-selector {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .mood-btn {
+                padding: 0.75rem;
+            }
+            
+            .mood-emoji {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header fade-up">
+            <h1 class="title">Mood Tracker</h1>
+            <p class="subtitle">Track your daily mood and build a streak</p>
+        </div>
+
+        <div class="streak-card fade-up">
+            <div class="streak-number" id="streakNumber">0</div>
+            <div class="streak-label">day streak</div>
+        </div>
+
+        <div id="alreadyLogged" class="already-logged fade-up" style="display: none;">
+            ✅ You've already logged your mood today! Come back tomorrow to continue your streak.
+        </div>
+
+        <div id="moodForm" class="mood-card fade-up">
+            <h2 class="mood-title">How are you feeling today?</h2>
+            
+            <div class="mood-selector">
+                <div class="mood-btn" data-mood="terrible">
+                    <span class="mood-emoji">😢</span>
+                    <div class="mood-label">Terrible</div>
+                </div>
+                <div class="mood-btn" data-mood="bad">
+                    <span class="mood-emoji">😞</span>
+                    <div class="mood-label">Bad</div>
+                </div>
+                <div class="mood-btn" data-mood="okay">
+                    <span class="mood-emoji">😐</span>
+                    <div class="mood-label">Okay</div>
+                </div>
+                <div class="mood-btn" data-mood="good">
+                    <span class="mood-emoji">😊</span>
+                    <div class="mood-label">Good</div>
+                </div>
+                <div class="mood-btn" data-mood="great">
+                    <span class="mood-emoji">🤩</span>
+                    <div class="mood-label">Great</div>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <label class="notes-label" for="moodNotes">Notes (optional)</label>
+                <textarea id="moodNotes" class="notes-input" placeholder="What's on your mind today?"></textarea>
+            </div>
+
+            <button id="saveBtn" class="save-btn" disabled>Save Today's Mood</button>
+        </div>
+
+        <div class="history-card fade-up">
+            <h2 class="history-title">Recent Moods</h2>
+            <div id="historyList">
+                <div style="text-align: center; color: var(--stone); padding: 2rem;">
+                    No moods logged yet. Start your streak today!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MOODS = {
+            terrible: { emoji: '😢', label: 'Terrible' },
+            bad: { emoji: '😞', label: 'Bad' },
+            okay: { emoji: '😐', label: 'Okay' },
+            good: { emoji: '😊', label: 'Good' },
+            great: { emoji: '🤩', label: 'Great' }
+        };
+
+        let selectedMood = null;
+        
+        // Get today's date as YYYY-MM-DD
+        function getTodayString() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        // Load mood data from localStorage
+        function loadMoodData() {
+            const data = localStorage.getItem('moodTracker');
+            return data ? JSON.parse(data) : {};
+        }
+
+        // Save mood data to localStorage
+        function saveMoodData(data) {
+            localStorage.setItem('moodTracker', JSON.stringify(data));
+        }
+
+        // Calculate streak
+        function calculateStreak() {
+            const moodData = loadMoodData();
+            const dates = Object.keys(moodData).sort().reverse();
+            
+            if (dates.length === 0) return 0;
+            
+            let streak = 0;
+            const today = new Date();
+            
+            for (let i = 0; i < dates.length; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(today.getDate() - i);
+                const checkDateString = checkDate.toISOString().split('T')[0];
+                
+                if (dates.includes(checkDateString)) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        // Update UI
+        function updateUI() {
+            const moodData = loadMoodData();
+            const today = getTodayString();
+            const hasLoggedToday = moodData[today];
+            
+            // Update streak
+            const streak = calculateStreak();
+            document.getElementById('streakNumber').textContent = streak;
+            
+            // Show/hide form based on whether user has logged today
+            if (hasLoggedToday) {
+                document.getElementById('alreadyLogged').style.display = 'block';
+                document.getElementById('moodForm').style.display = 'none';
+            } else {
+                document.getElementById('alreadyLogged').style.display = 'none';
+                document.getElementById('moodForm').style.display = 'block';
+            }
+            
+            // Update history
+            updateHistory();
+        }
+
+        // Update history display
+        function updateHistory() {
+            const moodData = loadMoodData();
+            const historyList = document.getElementById('historyList');
+            const dates = Object.keys(moodData).sort().reverse().slice(0, 7); // Last 7 days
+            
+            if (dates.length === 0) {
+                historyList.innerHTML = `
+                    <div style="text-align: center; color: var(--stone); padding: 2rem;">
+                        No moods logged yet. Start your streak today!
+                    </div>
+                `;
+                return;
+            }
+            
+            historyList.innerHTML = dates.map(date => {
+                const entry = moodData[date];
+                const dateObj = new Date(date + 'T00:00:00');
+                const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-date">${formattedDate}</div>
+                        <div class="history-mood" title="${MOODS[entry.mood].label}">${MOODS[entry.mood].emoji}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Handle mood selection
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove previous selection
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                
+                // Add selection to clicked button
+                btn.classList.add('selected');
+                selectedMood = btn.dataset.mood;
+                
+                // Enable save button
+                document.getElementById('saveBtn').disabled = false;
+            });
+        });
+
+        // Handle save mood
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            if (!selectedMood) return;
+            
+            const moodData = loadMoodData();
+            const today = getTodayString();
+            const notes = document.getElementById('moodNotes').value.trim();
+            
+            moodData[today] = {
+                mood: selectedMood,
+                notes: notes,
+                timestamp: new Date().toISOString()
+            };
+            
+            saveMoodData(moodData);
+            updateUI();
+            
+            // Reset form
+            selectedMood = null;
+            document.getElementById('moodNotes').value = '';
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('saveBtn').disabled = true;
+        });
+
+        // Initialize app
+        updateUI();
+    </script>
+</body>
+</html>

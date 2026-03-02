@@ -1,0 +1,12 @@
+{
+  "name": "showcase-app",
+  "version": "1.0.0",
+  "description": "Consolidated showcase of all demo and IP apps",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

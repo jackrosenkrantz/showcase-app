@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Lover App</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #120a0e;
+    --bg-card: #1a1014;
+    --bg-card-hover: #22161c;
+    --primary: #b88a9a;
+    --primary-soft: #d8c0cc;
+    --primary-deep: #8a6070;
+    --rose: #c4607a;
+    --rose-soft: rgba(196, 96, 122, 0.15);
+    --rose-glow: rgba(196, 96, 122, 0.3);
+    --rose-glow-strong: rgba(196, 96, 122, 0.6);
+    --wine: #6a2040;
+    --text: #e0d4d8;
+    --text-soft: #9a8690;
+    --text-muted: #5a4850;
+    --petal: #d4607a;
+    --petal-soft: #e8a0b0;
+    --warmth: rgba(196, 96, 122, 0.03);
+    --skin: #d4b896;
+    --skin-shadow: #b89a78;
+    --hair: #2a1a1e;
+    --cloth: #1a1018;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle 2px at 16px 16px, var(--warmth) 50%, transparent 50%),
+      radial-gradient(circle 2px at 32px 32px, var(--warmth) 50%, transparent 50%);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+
+  @keyframes pulse-rose {
+    0%, 100% { box-shadow: 0 0 8px var(--rose-soft); }
+    50% { box-shadow: 0 0 20px rgba(196, 96, 122, 0.4); }
+  }
+
+  @keyframes float-petal {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) rotate(40deg) scale(0.4); }
+  }
+
+  @keyframes glow-border {
+    0%, 100% { border-color: var(--primary); box-shadow: 0 0 8px var(--rose-glow); }
+    50% { border-color: var(--primary-soft); box-shadow: 0 0 16px var(--rose-glow-strong); }
+  }
+
+  @keyframes aura-pulse {
+    0%, 100% { box-shadow: 0 0 20px transparent; }
+    50% { box-shadow: 0 0 40px var(--rose-glow); }
+  }
+
+  @keyframes aura-pulse-full {
+    0%, 100% { box-shadow: 0 0 30px var(--rose-soft); }
+    50% { box-shadow: 0 0 60px rgba(196, 96, 122, 0.35); }
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    15% { transform: translate(-50%, -50%) scale(1.15); }
+    30% { transform: translate(-50%, -50%) scale(1); }
+    45% { transform: translate(-50%, -50%) scale(1.1); }
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  /* ========== HEADER ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .header h1 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    color: var(--rose);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  .header .subtitle {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-soft);
+    margin-bottom: 0.4rem;
+  }
+
+  .header .tagline {
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ========== STREAK ========== */
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0.35rem 0.85rem;
+    background: var(--rose-soft);
+    border: 1px solid rgba(196, 96, 122, 0.2);
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rose);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .streak-badge.show { opacity: 1; }
+  .streak-badge .flame { font-size: 0.8rem; }
+
+  /* ========== AVATAR ========== */
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.25s both;
+  }
+
+  .avatar-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 11;
+    transition: color 0.4s ease;
+  }
+
+  .avatar-title.opening { color: var(--primary); }
+  .avatar-title.radiant { color: var(--rose); }
+
+  .avatar-wrap {
+    position: relative;
+    width: 180px;
+    height: 280px;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    transition: box-shadow 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-wrap.aura-1 { animation: aura-pulse 3s ease-in-out infinite; }
+  .avatar-wrap.aura-2 { animation: aura-pulse 2.5s ease-in-out infinite; }
+  .avatar-wrap.aura-3 { animation: aura-pulse 2s ease-in-out infinite; }
+  .avatar-wrap.aura-4 { animation: aura-pulse-full 2s ease-in-out infinite; }
+
+  .avatar-figure {
+    position: relative;
+    width: 160px;
+    height: 260px;
+  }
+
+  /* Garden bed */
+  .garden-bed {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 14px;
+    background: #1a120e;
+    border-radius: 50%;
+    z-index: 0;
+    border: 1px solid #2a1a14;
+  }
+
+  /* Flowers (hidden by default) */
+  .garden-flowers {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 40px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .garden-flowers.show { opacity: 1; }
+
+  .flower { position: absolute; bottom: 0; }
+
+  .flower-stem {
+    width: 2px;
+    background: #4a6a40;
+    margin: 0 auto;
+    border-radius: 1px;
+  }
+
+  .flower-head {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-bottom: -1px;
+  }
+
+  .flower-1 { left: 10px; }
+  .flower-1 .flower-stem { height: 20px; }
+  .flower-1 .flower-head { background: var(--rose); }
+
+  .flower-2 { left: 35px; }
+  .flower-2 .flower-stem { height: 28px; }
+  .flower-2 .flower-head { background: var(--petal-soft); width: 8px; height: 8px; }
+
+  .flower-3 { right: 10px; }
+  .flower-3 .flower-stem { height: 22px; }
+  .flower-3 .flower-head { background: var(--rose); }
+
+  .flower-4 { right: 30px; }
+  .flower-4 .flower-stem { height: 16px; }
+  .flower-4 .flower-head { background: var(--petal-soft); width: 7px; height: 7px; }
+
+  /* Head */
+  .avatar-head {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 48px;
+    background: var(--skin);
+    border-radius: 50% 50% 45% 45%;
+    z-index: 4;
+  }
+
+  /* Hair */
+  .avatar-hair {
+    position: absolute;
+    top: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 52px;
+    height: 32px;
+    background: var(--hair);
+    border-radius: 50% 50% 40% 40%;
+    z-index: 5;
+  }
+
+  /* Flower crown (hidden by default) */
+  .avatar-crown {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    z-index: 6;
+    transition: transform 0.4s ease;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+  }
+
+  .avatar-crown.show { transform: translateX(-50%) scale(1); }
+
+  .crown-flower {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .crown-flower:nth-child(1) { background: var(--rose); }
+  .crown-flower:nth-child(2) { background: var(--petal-soft); width: 6px; height: 6px; }
+  .crown-flower:nth-child(3) { background: var(--rose); width: 9px; height: 9px; }
+  .crown-flower:nth-child(4) { background: var(--petal-soft); width: 6px; height: 6px; }
+  .crown-flower:nth-child(5) { background: var(--rose); }
+
+  /* Neck */
+  .avatar-neck {
+    position: absolute;
+    top: 84px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 14px;
+    background: var(--skin);
+    z-index: 3;
+  }
+
+  /* Torso */
+  .avatar-torso {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 70px;
+    background: var(--cloth);
+    border-radius: 6px 6px 2px 2px;
+    z-index: 3;
+    border: 1px solid #2a1a22;
+  }
+
+  .avatar-torso::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 16px solid var(--skin);
+  }
+
+  /* Flowing garment (hidden by default) */
+  .avatar-garment {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 88px;
+    height: 125px;
+    background: linear-gradient(180deg, #2a1828 0%, #1a1018 100%);
+    border-radius: 0 0 45px 45px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    border: 1px solid #3a2030;
+    animation: sway 4s ease-in-out infinite;
+  }
+
+  .avatar-garment.show { opacity: 1; }
+
+  .garment-fold-1, .garment-fold-2 {
+    position: absolute;
+    width: 1px;
+    background: rgba(196, 96, 122, 0.1);
+  }
+
+  .garment-fold-1 { top: 20px; bottom: 20px; left: 30%; }
+  .garment-fold-2 { top: 30px; bottom: 15px; right: 35%; }
+
+  /* Heart glow (hidden by default) */
+  .avatar-heart {
+    position: absolute;
+    top: 116px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-heart.show { opacity: 1; }
+
+  .heart-shape {
+    width: 16px;
+    height: 16px;
+    background: var(--rose);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-radius: 50% 50% 0 0;
+    animation: heartbeat 2s ease-in-out infinite;
+    box-shadow: 0 0 12px var(--rose-glow);
+  }
+
+  .heart-shape::before, .heart-shape::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--rose);
+    border-radius: 50%;
+  }
+
+  .heart-shape::before { top: -8px; left: 0; }
+  .heart-shape::after { top: 0; left: -8px; }
+
+  /* Arms */
+  .avatar-arm-left, .avatar-arm-right {
+    position: absolute;
+    top: 100px;
+    width: 16px;
+    height: 50px;
+    background: var(--skin);
+    border-radius: 8px;
+    z-index: 2;
+  }
+
+  .avatar-arm-left { left: 26px; transform: rotate(6deg); }
+  .avatar-arm-right { right: 26px; transform: rotate(-6deg); }
+
+  /* Legs */
+  .avatar-legs {
+    position: absolute;
+    top: 164px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+  }
+
+  .avatar-leg-left, .avatar-leg-right {
+    position: absolute;
+    width: 18px;
+    height: 55px;
+    background: var(--cloth);
+    border-radius: 4px;
+    border: 1px solid #2a1a22;
+  }
+
+  .avatar-leg-left { left: -22px; }
+  .avatar-leg-right { left: 4px; }
+
+  .avatar-boot-left, .avatar-boot-right {
+    position: absolute;
+    top: 50px;
+    width: 22px;
+    height: 12px;
+    background: #1a100e;
+    border-radius: 2px 6px 6px 2px;
+  }
+
+  .avatar-boot-left { left: -24px; }
+  .avatar-boot-right { left: 2px; border-radius: 6px 2px 2px 6px; }
+
+  /* Butterflies (hidden by default) */
+  .avatar-butterflies {
+    position: absolute;
+    inset: -20px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .avatar-butterflies.show { opacity: 1; }
+
+  .avatar-butterflies span {
+    position: absolute;
+    font-size: 0.75rem;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  .avatar-butterflies span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .avatar-butterflies span:nth-child(2) { top: 5%; right: 10%; animation-delay: 0.5s; }
+  .avatar-butterflies span:nth-child(3) { top: 45%; left: 0; animation-delay: 1s; }
+  .avatar-butterflies span:nth-child(4) { top: 35%; right: 0; animation-delay: 0.3s; }
+  .avatar-butterflies span:nth-child(5) { bottom: 30%; left: 8%; animation-delay: 0.7s; }
+  .avatar-butterflies span:nth-child(6) { bottom: 25%; right: 5%; animation-delay: 1.2s; }
+
+  /* Reward text */
+  .avatar-reward-text {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--rose);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s ease;
+    text-align: center;
+    min-height: 1.5em;
+  }
+
+  .avatar-reward-text.show { opacity: 1; transform: translateY(0); }
+  .avatar-reward-text.tier { color: var(--text-soft); font-size: 0.95rem; }
+
+  /* ========== PRACTICES ========== */
+  .practices-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .practices-header {
+    font-family: 'Lora', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .practices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .practices-grid { grid-template-columns: 1fr; }
+  }
+
+  .practice-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--text-muted);
+    border-radius: 14px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .practice-card:hover { background: var(--bg-card-hover); border-color: var(--text-soft); }
+
+  .practice-card.checked {
+    border-color: var(--primary);
+    animation: glow-border 2s ease-in-out infinite;
+  }
+
+  .practice-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .practice-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    margin-top: 1px;
+  }
+
+  .practice-checkbox .check-icon {
+    opacity: 0;
+    color: var(--bg);
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease;
+  }
+
+  .practice-card.checked .practice-checkbox {
+    background: var(--rose);
+    border-color: var(--rose);
+    box-shadow: 0 0 8px var(--rose-glow);
+  }
+
+  .practice-card.checked .practice-checkbox .check-icon { opacity: 1; }
+
+  .practice-name {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    transition: all 0.3s ease;
+    line-height: 1.4;
+  }
+
+  .practice-card.checked .practice-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--rose);
+    color: var(--text-soft);
+  }
+
+  .practice-desc {
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: 2.15rem;
+  }
+
+  .practice-card.checked .practice-desc { color: var(--text-soft); }
+
+  .practice-affirm {
+    margin-left: 2.15rem;
+    margin-top: 0.5rem;
+    font-family: 'Lora', serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--rose);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.4s ease;
+  }
+
+  .practice-card.checked .practice-affirm { opacity: 1; transform: translateY(0); }
+
+  .petal-float {
+    position: absolute;
+    font-size: 0.85rem;
+    pointer-events: none;
+    animation: float-petal 1.2s ease-out forwards;
+  }
+
+  /* ========== PROGRESS ========== */
+  .progress-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.55s both;
+  }
+
+  .progress-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 10px;
+    background: rgba(196, 96, 122, 0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--wine) 0%, var(--rose) 100%);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .progress-bar-fill.full {
+    animation: pulse-rose 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--rose) 0%, var(--petal-soft) 100%);
+  }
+
+  .progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-soft);
+  }
+
+  .progress-text.complete {
+    color: var(--rose);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  /* ========== JOURNAL ========== */
+  .journal-section { margin-bottom: 2.5rem; animation: fadeUp 0.5s ease both; text-align: center; }
+  .journal-section.hidden { display: none; }
+
+  .journal-prompt {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--rose);
+    margin-bottom: 0.75rem;
+  }
+
+  .journal-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--primary-soft);
+    background: var(--bg-card);
+    border: 1px solid var(--text-muted);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 3.5em;
+    transition: border-color 0.3s ease;
+  }
+
+  .journal-input::placeholder { color: var(--text-muted); font-style: italic; }
+  .journal-input:focus { border-color: var(--rose); }
+
+  .journal-save-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .journal-save-btn:hover { color: var(--rose); border-color: var(--rose); }
+  .journal-save-btn.saved { color: var(--rose); border-color: var(--rose); cursor: default; }
+
+  /* ========== RESET ========== */
+  .reset-section { text-align: center; animation: fadeUp 0.8s ease 0.7s both; }
+
+  .reset-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .reset-btn:hover { color: var(--rose); border-color: var(--rose); }
+
+  /* ========== MODAL ========== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(18, 10, 14, 0.9); backdrop-filter: blur(6px);
+    z-index: 100; align-items: center; justify-content: center; padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-card); border: 1px solid var(--text-muted);
+    border-radius: 18px; padding: 2.5rem; max-width: 360px; width: 100%; text-align: center;
+  }
+
+  .modal p {
+    font-family: 'Lora', serif; font-size: 1rem; font-style: italic;
+    color: var(--primary-soft); margin-bottom: 1.5rem; line-height: 1.6;
+  }
+
+  .modal-btns { display: flex; gap: 0.75rem; justify-content: center; }
+
+  .modal-btn {
+    font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 0.6rem 1.3rem;
+    border-radius: 100px; cursor: pointer; transition: all 0.25s ease;
+  }
+
+  .modal-btn.confirm { background: var(--rose); color: var(--bg); border: none; }
+  .modal-btn.confirm:hover { background: #d07090; }
+  .modal-btn.cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted); }
+  .modal-btn.cancel:hover { color: var(--text-soft); border-color: var(--text-soft); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>The Lover App</h1>
+    <div class="subtitle">To feel everything is not weakness. It is the whole point.</div>
+    <div class="tagline">Feel. Connect. Create beauty. Stay present.</div>
+    <div class="streak-badge" id="streakBadge">
+      <span class="flame">🌹</span>
+      <span id="streakText">Day 1 streak</span>
+    </div>
+  </div>
+
+  <div class="avatar-section">
+    <div class="avatar-title" id="avatarTitle">Seed</div>
+    <div class="avatar-wrap" id="avatarWrap">
+      <div class="avatar-figure">
+        <!-- Garden bed -->
+        <div class="garden-bed"></div>
+        <div class="garden-flowers" id="gardenFlowers">
+          <div class="flower flower-1"><div class="flower-head"></div><div class="flower-stem"></div></div>
+          <div class="flower flower-2"><div class="flower-head"></div><div class="flower-stem"></div></div>
+          <div class="flower flower-3"><div class="flower-head"></div><div class="flower-stem"></div></div>
+          <div class="flower flower-4"><div class="flower-head"></div><div class="flower-stem"></div></div>
+        </div>
+        <!-- Garment -->
+        <div class="avatar-garment" id="avatarGarment">
+          <div class="garment-fold-1"></div>
+          <div class="garment-fold-2"></div>
+        </div>
+        <!-- Hair & Crown -->
+        <div class="avatar-hair"></div>
+        <div class="avatar-crown" id="avatarCrown">
+          <div class="crown-flower"></div>
+          <div class="crown-flower"></div>
+          <div class="crown-flower"></div>
+          <div class="crown-flower"></div>
+          <div class="crown-flower"></div>
+        </div>
+        <!-- Head & Neck -->
+        <div class="avatar-head"></div>
+        <div class="avatar-neck"></div>
+        <!-- Arms -->
+        <div class="avatar-arm-left"></div>
+        <div class="avatar-arm-right"></div>
+        <!-- Torso & Heart -->
+        <div class="avatar-torso"></div>
+        <div class="avatar-heart" id="avatarHeart">
+          <div class="heart-shape"></div>
+        </div>
+        <!-- Legs -->
+        <div class="avatar-legs">
+          <div class="avatar-leg-left"></div>
+          <div class="avatar-leg-right"></div>
+          <div class="avatar-boot-left"></div>
+          <div class="avatar-boot-right"></div>
+        </div>
+        <!-- Butterflies -->
+        <div class="avatar-butterflies" id="avatarButterflies">
+          <span>🦋</span><span>🦋</span><span>🦋</span>
+          <span>🦋</span><span>🦋</span><span>🦋</span>
+        </div>
+      </div>
+    </div>
+    <div class="avatar-reward-text" id="avatarRewardText"></div>
+  </div>
+
+  <div class="practices-section">
+    <div class="practices-header">Today's Devotion</div>
+    <div class="practices-grid" id="practicesGrid"></div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-label">Today's presence:</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 of 4 practices complete</div>
+  </div>
+
+  <div class="journal-section hidden" id="journalSection">
+    <div class="journal-prompt" id="journalPrompt">What made you feel alive today?</div>
+    <textarea class="journal-input" id="journalInput" placeholder="Let the words bloom..." rows="3"></textarea>
+    <br>
+    <button class="journal-save-btn" id="journalSaveBtn" onclick="saveJournal()">Press it into the page</button>
+  </div>
+
+  <div class="reset-section">
+    <button class="reset-btn" onclick="showResetModal()">New Day, New Garden</button>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <p>The garden resets with the sun.<br>Ready to feel it all again?</p>
+    <div class="modal-btns">
+      <button class="modal-btn confirm" onclick="confirmReset()">Open</button>
+      <button class="modal-btn cancel" onclick="closeResetModal()">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PRACTICES = [
+    { key: 'feel', name: 'Feel Something Fully', desc: 'Joy, grief, desire, awe. Don\'t numb it. Let it move through.' },
+    { key: 'connect', name: 'Connect with Someone', desc: 'Real eye contact. A vulnerable text. A conversation that matters.' },
+    { key: 'beauty', name: 'Create Beauty', desc: 'Cook, arrange, write, dress with care. Beauty is not frivolous — it\'s sacred.' },
+    { key: 'present', name: 'Be Fully Present', desc: 'One moment today where you weren\'t planning or replaying. Just here.' }
+  ];
+
+  const PRAISE_POOL = [
+    'Felt.', 'Present.', 'Alive.', 'Connected.',
+    'Beautiful.', 'Open.', 'That was real.', 'You let it in.',
+    'Tender and brave.', 'Bloom.'
+  ];
+
+  const TIER_MESSAGES = [
+    '',
+    'The first petal opens.',
+    'Halfway into bloom.',
+    'Almost fully open. One more.',
+    ''
+  ];
+
+  const FULL_PRAISE = [
+    'Full bloom. You felt it all today.',
+    'Nothing held back. This is what it means to be alive.',
+    'Present, connected, beautiful, open. The lover\'s work, done.',
+    'You let the world in. That takes more courage than armor.',
+    'Every practice. Not because you had to — because you wanted to.'
+  ];
+
+  const JOURNAL_PROMPTS = [
+    'What made you feel alive today?',
+    'Who did you really see today?',
+    'What moment do you want to remember from today?',
+    'Where did you let yourself be vulnerable?',
+    'What was the most beautiful thing you noticed?'
+  ];
+
+  const TITLES = [
+    { min: 0, label: 'Seed', css: '' },
+    { min: 3, label: 'Bloom', css: 'opening' },
+    { min: 7, label: 'Flame', css: 'opening' },
+    { min: 14, label: 'Muse', css: 'opening' },
+    { min: 21, label: 'Beloved', css: 'radiant' },
+    { min: 30, label: 'Lover', css: 'radiant' }
+  ];
+
+  function getTitle(streak) {
+    let title = TITLES[0];
+    for (const t of TITLES) { if (streak >= t.min) title = t; }
+    return title;
+  }
+
+  function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function dayKey() { return new Date().toISOString().slice(0, 10); }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem('lover-practices');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data.checked || {};
+    } catch { return {}; }
+  }
+
+  function saveState(checked) {
+    localStorage.setItem('lover-practices', JSON.stringify({ date: dayKey(), checked }));
+  }
+
+  function loadStreak() {
+    try {
+      const raw = localStorage.getItem('lover-streak');
+      if (!raw) return { count: 0, lastDate: null };
+      return JSON.parse(raw);
+    } catch { return { count: 0, lastDate: null }; }
+  }
+
+  function saveStreak(s) { localStorage.setItem('lover-streak', JSON.stringify(s)); }
+
+  function loadJournal() {
+    try {
+      const raw = localStorage.getItem('lover-journal');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data;
+    } catch { return {}; }
+  }
+
+  function saveJournalEntry(text) {
+    const entries = JSON.parse(localStorage.getItem('lover-journal-history') || '[]');
+    entries.push({ date: dayKey(), text, timestamp: new Date().toISOString() });
+    localStorage.setItem('lover-journal-history', JSON.stringify(entries));
+    localStorage.setItem('lover-journal', JSON.stringify({ date: dayKey(), text, saved: true }));
+  }
+
+  let state = loadState();
+  let praisePicks = {};
+  PRACTICES.forEach(d => { praisePicks[d.key] = randomFrom(PRAISE_POOL); });
+
+  function updateStreak() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    if (count < 4) return;
+    const streak = loadStreak();
+    const today = dayKey();
+    if (streak.lastDate === today) return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = yesterday.toISOString().slice(0, 10);
+    if (streak.lastDate === yesterdayKey) { streak.count += 1; }
+    else if (streak.lastDate !== today) { streak.count = 1; }
+    streak.lastDate = today;
+    saveStreak(streak);
+  }
+
+  function renderPractices() {
+    const grid = document.getElementById('practicesGrid');
+    grid.innerHTML = PRACTICES.map(d => {
+      const isChecked = state[d.key] ? ' checked' : '';
+      const praise = praisePicks[d.key] || 'Felt.';
+      return '<div class="practice-card' + isChecked + '" data-key="' + d.key + '" onclick="togglePractice(\'' + d.key + '\', this)">' +
+        '<div class="practice-card-top">' +
+          '<div class="practice-checkbox"><span class="check-icon">✓</span></div>' +
+          '<div class="practice-name">' + d.name + '</div>' +
+        '</div>' +
+        '<div class="practice-desc">' + d.desc + '</div>' +
+        '<div class="practice-affirm">' + praise + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function togglePractice(key, card) {
+    state[key] = !state[key];
+    saveState(state);
+    if (state[key]) {
+      praisePicks[key] = randomFrom(PRAISE_POOL);
+      spawnPetal(card);
+    }
+    updateStreak();
+    renderAll();
+  }
+
+  function spawnPetal(card) {
+    const el = document.createElement('span');
+    el.className = 'petal-float';
+    el.textContent = '🌸';
+    el.style.left = (Math.random() * 60 + 20) + '%';
+    el.style.bottom = '20%';
+    card.appendChild(el);
+    setTimeout(() => el.remove(), 1200);
+  }
+
+  function renderAvatar() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const streak = loadStreak();
+    const title = getTitle(streak.count);
+
+    document.getElementById('avatarTitle').textContent = title.label;
+    document.getElementById('avatarTitle').className = 'avatar-title' + (title.css ? ' ' + title.css : '');
+
+    const wrap = document.getElementById('avatarWrap');
+    wrap.classList.remove('aura-1', 'aura-2', 'aura-3', 'aura-4');
+    if (count > 0) wrap.classList.add('aura-' + Math.min(count, 4));
+
+    const crown = document.getElementById('avatarCrown');
+    const garment = document.getElementById('avatarGarment');
+    const heart = document.getElementById('avatarHeart');
+    const flowers = document.getElementById('gardenFlowers');
+    const butterflies = document.getElementById('avatarButterflies');
+    const rewardText = document.getElementById('avatarRewardText');
+
+    crown.classList.remove('show');
+    garment.classList.remove('show');
+    heart.classList.remove('show');
+    flowers.classList.remove('show');
+    butterflies.classList.remove('show');
+    rewardText.classList.remove('show', 'tier');
+
+    // 1: flower crown — you chose to feel
+    if (count >= 1) crown.classList.add('show');
+    // 2: flowing garment — you opened up
+    if (count >= 2) garment.classList.add('show');
+    // 3: heart glow — your heart is visible
+    if (count >= 3) heart.classList.add('show');
+
+    // 4: full bloom — flowers + butterflies
+    if (count >= 4) {
+      flowers.classList.add('show');
+      butterflies.classList.add('show');
+      rewardText.textContent = randomFrom(FULL_PRAISE);
+      rewardText.classList.add('show');
+    } else if (count > 0) {
+      rewardText.textContent = TIER_MESSAGES[count];
+      rewardText.classList.add('show', 'tier');
+    }
+  }
+
+  function renderProgress() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+    fill.style.width = (count / 4 * 100) + '%';
+    if (count === 4) {
+      fill.classList.add('full');
+      text.className = 'progress-text complete';
+      text.textContent = '🌹 Full bloom. You let the world in.';
+    } else {
+      fill.classList.remove('full');
+      text.className = 'progress-text';
+      text.textContent = count + ' of 4 practices complete';
+    }
+  }
+
+  function renderStreak() {
+    const streak = loadStreak();
+    const badge = document.getElementById('streakBadge');
+    const text = document.getElementById('streakText');
+    if (streak.count > 0) {
+      badge.classList.add('show');
+      text.textContent = 'Day ' + streak.count + ' streak';
+    } else { badge.classList.remove('show'); }
+  }
+
+  function renderJournal() {
+    const count = PRACTICES.filter(d => state[d.key]).length;
+    const section = document.getElementById('journalSection');
+    const saved = loadJournal();
+    if (count === 4) {
+      section.classList.remove('hidden');
+      document.getElementById('journalPrompt').textContent = randomFrom(JOURNAL_PROMPTS);
+      if (saved.saved) {
+        document.getElementById('journalInput').value = saved.text || '';
+        document.getElementById('journalSaveBtn').textContent = 'Pressed 🌹';
+        document.getElementById('journalSaveBtn').classList.add('saved');
+      }
+    } else { section.classList.add('hidden'); }
+  }
+
+  function saveJournal() {
+    const text = document.getElementById('journalInput').value.trim();
+    if (!text) return;
+    saveJournalEntry(text);
+    const btn = document.getElementById('journalSaveBtn');
+    btn.textContent = 'Pressed 🌹';
+    btn.classList.add('saved');
+  }
+
+  function renderAll() { renderPractices(); renderAvatar(); renderProgress(); renderStreak(); renderJournal(); }
+
+  function showResetModal() { document.getElementById('resetModal').classList.add('open'); }
+  function closeResetModal() { document.getElementById('resetModal').classList.remove('open'); }
+
+  function confirmReset() {
+    state = {};
+    saveState(state);
+    praisePicks = {};
+    PRACTICES.forEach(d => { praisePicks[d.key] = randomFrom(PRAISE_POOL); });
+    renderAll();
+    closeResetModal();
+  }
+
+  document.getElementById('resetModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeResetModal();
+  });
+
+  renderAll();
+
+  window.addEventListener('focus', () => {
+    const fresh = loadState();
+    if (Object.keys(fresh).length === 0 && Object.keys(state).length > 0) {
+      state = fresh;
+      renderAll();
+    }
+  });
+</script>
+
+</body>
+</html>

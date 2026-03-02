@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daddy Dom App</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f0d0a;
+    --bg-card: #1c1814;
+    --bg-card-hover: #261f1a;
+    --primary: #c9a96e;
+    --primary-soft: #e8d5b0;
+    --primary-deep: #8b6f3a;
+    --crimson: #8b2020;
+    --crimson-soft: rgba(139, 32, 32, 0.3);
+    --leather: #3d2b1a;
+    --leather-glow: rgba(61, 43, 26, 0.6);
+    --text: #e8d5b0;
+    --text-soft: #a89880;
+    --text-muted: #5a4d3e;
+    --grain: rgba(232, 213, 176, 0.02);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Leather grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 2px 2px at 15px 15px, var(--grain) 50%, transparent 50%),
+      radial-gradient(ellipse 2px 2px at 45px 45px, var(--grain) 50%, transparent 50%),
+      radial-gradient(ellipse 1px 1px at 30px 8px, var(--grain) 50%, transparent 50%);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 8px rgba(201, 169, 110, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(201, 169, 110, 0.4); }
+  }
+
+  @keyframes glow-border {
+    0%, 100% { border-color: var(--primary); box-shadow: 0 0 8px rgba(201, 169, 110, 0.2); }
+    50% { border-color: var(--primary-soft); box-shadow: 0 0 16px rgba(201, 169, 110, 0.4); }
+  }
+
+  @keyframes aura-pulse {
+    0%, 100% { box-shadow: 0 0 20px transparent; }
+    50% { box-shadow: 0 0 40px var(--leather-glow); }
+  }
+
+  @keyframes aura-pulse-gold {
+    0%, 100% { box-shadow: 0 0 30px rgba(201, 169, 110, 0.15); }
+    50% { box-shadow: 0 0 60px rgba(201, 169, 110, 0.3); }
+  }
+
+  @keyframes ember-rise {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(0.6); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+
+  /* ========== HEADER ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    color: var(--primary-soft);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  .header .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--primary);
+    margin-bottom: 0.4rem;
+  }
+
+  .header .tagline {
+    font-size: 0.7rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0.35rem 0.85rem;
+    background: rgba(201, 169, 110, 0.08);
+    border: 1px solid rgba(201, 169, 110, 0.15);
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--primary);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .streak-badge.show { opacity: 1; }
+  .streak-badge .flame { font-size: 0.8rem; }
+
+  /* ========== AVATAR ========== */
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease 0.25s both;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    width: 160px;
+    height: 240px;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    transition: box-shadow 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-figure {
+    position: relative;
+    width: 140px;
+    height: 210px;
+  }
+
+  .avatar-wrap.aura-1 { animation: aura-pulse 3s ease-in-out infinite; }
+  .avatar-wrap.aura-2 { animation: aura-pulse 2.5s ease-in-out infinite; }
+  .avatar-wrap.aura-3 { animation: aura-pulse 2s ease-in-out infinite; }
+  .avatar-wrap.aura-4 { animation: aura-pulse-gold 2s ease-in-out infinite; }
+
+  .avatar-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    transition: color 0.4s ease;
+    position: relative;
+    z-index: 11;
+  }
+
+  .avatar-title.elevated { color: var(--primary); }
+  .avatar-title.crowned { color: var(--primary-soft); }
+
+  /* Head */
+  .avatar-head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 54px;
+    background: #d4a574;
+    border-radius: 50% 50% 48% 48%;
+    z-index: 3;
+  }
+
+  /* Hair — short, dark, slicked */
+  .avatar-hair {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 54px;
+    height: 28px;
+    background: #1a1210;
+    border-radius: 50% 50% 20% 20%;
+    z-index: 4;
+  }
+
+  /* Jaw / beard shadow */
+  .avatar-jaw {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 22px;
+    background: rgba(26, 18, 16, 0.25);
+    border-radius: 0 0 50% 50%;
+    z-index: 4;
+  }
+
+  /* Neck */
+  .avatar-neck {
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 18px;
+    background: #d4a574;
+    border-radius: 0 0 4px 4px;
+    z-index: 2;
+  }
+
+  /* Shoulders — broad */
+  .avatar-shoulders {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 20px;
+    background: #1a1210;
+    border-radius: 8px 8px 0 0;
+    z-index: 2;
+    transition: all 0.4s ease;
+  }
+
+  /* Torso — default black tee */
+  .avatar-torso {
+    position: absolute;
+    top: 74px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 76px;
+    height: 60px;
+    background: #1a1210;
+    border-radius: 0 0 6px 6px;
+    z-index: 2;
+    transition: all 0.4s ease;
+  }
+
+  /* Leather vest overlay — hidden by default */
+  .avatar-vest {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 76px;
+    border-radius: 8px 8px 6px 6px;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    background: linear-gradient(180deg, #3d2b1a 0%, #2a1d10 100%);
+    border: 1px solid rgba(201, 169, 110, 0.15);
+  }
+
+  .avatar-vest.show { opacity: 1; }
+
+  /* Vest lapels */
+  .avatar-vest::before, .avatar-vest::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 30px;
+    background: #4a3520;
+    z-index: 6;
+  }
+  .avatar-vest::before { left: 8px; border-radius: 0 0 50% 0; }
+  .avatar-vest::after { right: 8px; border-radius: 0 0 0 50%; }
+
+  /* Belt */
+  .avatar-belt {
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 8px;
+    background: #2a1d10;
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 2px;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-belt.show { opacity: 1; }
+
+  /* Belt buckle */
+  .avatar-belt::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    border-radius: 2px;
+    border: 1px solid var(--primary-deep);
+  }
+
+  /* Arms */
+  .avatar-arm-left, .avatar-arm-right {
+    position: absolute;
+    top: 68px;
+    width: 18px;
+    height: 54px;
+    background: #d4a574;
+    border-radius: 8px;
+    z-index: 1;
+    transition: all 0.4s ease;
+  }
+
+  .avatar-arm-left { left: 8px; transform: rotate(6deg); }
+  .avatar-arm-right { right: 8px; transform: rotate(-6deg); }
+
+  /* Rolled sleeves — visible when vest is on */
+  .avatar-arm-left.sleeved, .avatar-arm-right.sleeved {
+    background: linear-gradient(180deg, #1a1210 0%, #1a1210 35%, #d4a574 35%, #d4a574 100%);
+  }
+
+  /* Watch on left wrist */
+  .avatar-watch {
+    position: absolute;
+    top: 112px;
+    left: 12px;
+    width: 14px;
+    height: 8px;
+    background: #1a1210;
+    border: 1px solid var(--primary);
+    border-radius: 2px;
+    z-index: 7;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-watch.show { opacity: 1; }
+
+  /* Ring on right hand */
+  .avatar-ring {
+    position: absolute;
+    top: 118px;
+    right: 14px;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    z-index: 7;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-ring.show { opacity: 1; }
+
+  /* Pants */
+  .avatar-leg-left, .avatar-leg-right {
+    position: absolute;
+    top: 136px;
+    width: 18px;
+    height: 66px;
+    background: #1a1615;
+    border-radius: 4px 4px 6px 6px;
+    z-index: 1;
+    transition: all 0.4s ease;
+  }
+
+  .avatar-leg-left { left: 38px; }
+  .avatar-leg-right { right: 38px; }
+
+  /* Boots */
+  .avatar-boot-left, .avatar-boot-right {
+    position: absolute;
+    top: 198px;
+    width: 22px;
+    height: 12px;
+    background: #2a1d10;
+    border-radius: 4px 4px 6px 6px;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .avatar-boot-left { left: 36px; }
+  .avatar-boot-right { right: 36px; }
+  .avatar-boot-left.show, .avatar-boot-right.show { opacity: 1; }
+
+  /* Sparkle overlay */
+  .avatar-sparkles {
+    position: absolute;
+    inset: -20px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .avatar-sparkles.show { opacity: 1; }
+
+  .avatar-sparkles span {
+    position: absolute;
+    font-size: 0.8rem;
+    color: var(--primary);
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+
+  .avatar-sparkles span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .avatar-sparkles span:nth-child(2) { top: 5%; right: 10%; animation-delay: 0.3s; }
+  .avatar-sparkles span:nth-child(3) { top: 40%; left: 0; animation-delay: 0.6s; }
+  .avatar-sparkles span:nth-child(4) { top: 35%; right: 0; animation-delay: 0.9s; }
+  .avatar-sparkles span:nth-child(5) { bottom: 20%; left: 10%; animation-delay: 0.4s; }
+  .avatar-sparkles span:nth-child(6) { bottom: 15%; right: 5%; animation-delay: 0.7s; }
+
+  /* Reward text */
+  .avatar-reward-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--primary);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s ease;
+    text-align: center;
+    min-height: 1.5em;
+  }
+
+  .avatar-reward-text.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .avatar-reward-text.tier {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+  }
+
+  /* ========== RITUALS ========== */
+  .rituals-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .rituals-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .rituals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .rituals-grid { grid-template-columns: 1fr; }
+  }
+
+  .ritual-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--text-muted);
+    border-radius: 14px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ritual-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-soft);
+  }
+
+  .ritual-card.checked {
+    border-color: var(--primary);
+    animation: glow-border 2s ease-in-out infinite;
+  }
+
+  .ritual-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ritual-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    margin-top: 1px;
+  }
+
+  .ritual-checkbox .check-icon {
+    opacity: 0;
+    color: var(--bg);
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease;
+  }
+
+  .ritual-card.checked .ritual-checkbox {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(201, 169, 110, 0.3);
+  }
+
+  .ritual-card.checked .ritual-checkbox .check-icon { opacity: 1; }
+
+  .ritual-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--primary-soft);
+    transition: all 0.3s ease;
+    line-height: 1.4;
+  }
+
+  .ritual-card.checked .ritual-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--primary);
+    color: var(--text-soft);
+  }
+
+  .ritual-desc {
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-left: 2.15rem;
+    transition: color 0.3s ease;
+  }
+
+  .ritual-card.checked .ritual-desc { color: var(--text-soft); }
+
+  .ritual-affirm {
+    margin-left: 2.15rem;
+    margin-top: 0.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--primary);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.4s ease;
+  }
+
+  .ritual-card.checked .ritual-affirm {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ember {
+    position: absolute;
+    font-size: 0.85rem;
+    pointer-events: none;
+    animation: ember-rise 1s ease-out forwards;
+  }
+
+  /* ========== PROGRESS ========== */
+  .progress-section {
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease 0.55s both;
+  }
+
+  .progress-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    height: 10px;
+    background: rgba(201, 169, 110, 0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--primary-deep) 0%, var(--primary) 100%);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .progress-bar-fill.full {
+    animation: pulse-gold 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-soft) 100%);
+  }
+
+  .progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-soft);
+    transition: all 0.3s ease;
+  }
+
+  .progress-text.complete {
+    color: var(--primary);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  /* ========== JOURNAL ========== */
+  .journal-section {
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.5s ease both;
+    text-align: center;
+  }
+
+  .journal-section.hidden { display: none; }
+
+  .journal-prompt {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+  }
+
+  .journal-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--primary-soft);
+    background: var(--bg-card);
+    border: 1px solid var(--text-muted);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 3.5em;
+    transition: border-color 0.3s ease;
+  }
+
+  .journal-input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .journal-input:focus { border-color: var(--primary); }
+
+  .journal-save-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .journal-save-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .journal-save-btn.saved {
+    color: var(--primary);
+    border-color: var(--primary);
+    cursor: default;
+  }
+
+  /* ========== RESET ========== */
+  .reset-section {
+    text-align: center;
+    animation: fadeUp 0.8s ease 0.7s both;
+  }
+
+  .reset-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .reset-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  /* ========== MODAL ========== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 13, 10, 0.88);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--text-muted);
+    border-radius: 18px;
+    padding: 2.5rem;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .modal p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--primary-soft);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .modal-btns {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .modal-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.3rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .modal-btn.confirm {
+    background: var(--primary);
+    color: var(--bg);
+    border: none;
+  }
+
+  .modal-btn.confirm:hover { background: var(--primary-soft); }
+
+  .modal-btn.cancel {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--text-muted);
+  }
+
+  .modal-btn.cancel:hover {
+    color: var(--text-soft);
+    border-color: var(--text-soft);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>The Daddy Dom App</h1>
+    <div class="subtitle">Discipline is devotion. Structure is love.</div>
+    <div class="tagline">Hold the line. Earn your authority.</div>
+    <div class="streak-badge" id="streakBadge">
+      <span class="flame">&#9830;</span>
+      <span id="streakText">Day 1 streak</span>
+    </div>
+  </div>
+
+  <!-- AVATAR -->
+  <div class="avatar-section">
+    <div class="avatar-title" id="avatarTitle">Unproven</div>
+    <div class="avatar-wrap" id="avatarWrap">
+      <div class="avatar-figure">
+        <div class="avatar-hair"></div>
+        <div class="avatar-head"></div>
+        <div class="avatar-jaw"></div>
+        <div class="avatar-neck"></div>
+        <div class="avatar-shoulders" id="avatarShoulders"></div>
+        <div class="avatar-arm-left" id="avatarArmL"></div>
+        <div class="avatar-arm-right" id="avatarArmR"></div>
+        <div class="avatar-torso" id="avatarTorso"></div>
+        <div class="avatar-vest" id="avatarVest"></div>
+        <div class="avatar-watch" id="avatarWatch"></div>
+        <div class="avatar-ring" id="avatarRing"></div>
+        <div class="avatar-belt" id="avatarBelt"></div>
+        <div class="avatar-leg-left" id="avatarLegL"></div>
+        <div class="avatar-leg-right" id="avatarLegR"></div>
+        <div class="avatar-boot-left" id="avatarBootL"></div>
+        <div class="avatar-boot-right" id="avatarBootR"></div>
+        <div class="avatar-sparkles" id="avatarSparkles">
+          <span>&#9830;</span><span>&#9830;</span><span>&#9830;</span>
+          <span>&#9830;</span><span>&#9830;</span><span>&#9830;</span>
+        </div>
+      </div>
+    </div>
+    <div class="avatar-reward-text" id="avatarRewardText"></div>
+  </div>
+
+  <!-- RITUALS -->
+  <div class="rituals-section">
+    <div class="rituals-header">Today's Disciplines</div>
+    <div class="rituals-grid" id="ritualsGrid"></div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-label">Today's authority:</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 of 4 disciplines complete</div>
+  </div>
+
+  <!-- JOURNAL -->
+  <div class="journal-section hidden" id="journalSection">
+    <div class="journal-prompt" id="journalPrompt">What did you hold today?</div>
+    <textarea class="journal-input" id="journalInput" placeholder="Write here... this is between you and the mirror." rows="3"></textarea>
+    <br>
+    <button class="journal-save-btn" id="journalSaveBtn" onclick="saveJournal()">Seal it</button>
+  </div>
+
+  <!-- RESET -->
+  <div class="reset-section">
+    <button class="reset-btn" onclick="showResetModal()">New Day</button>
+  </div>
+
+</div>
+
+<!-- RESET MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <p>Ready to earn it again?</p>
+    <div class="modal-btns">
+      <button class="modal-btn confirm" onclick="confirmReset()">Yes. Again.</button>
+      <button class="modal-btn cancel" onclick="closeResetModal()">Not yet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const RITUALS = [
+    { key: 'lead', name: 'Lead Something Today', desc: 'You made a decision, set a boundary, or held space. That\'s what Daddies do.' },
+    { key: 'discipline', name: 'My Discipline Practice', desc: 'Gym, cold shower, fasting, or structure. You showed up for yourself first.' },
+    { key: 'provide', name: 'I Provided or Protected', desc: 'You took care of someone or something. Financially, emotionally, practically.' },
+    { key: 'presence', name: 'I Was Fully Present', desc: 'You put the phone down. You listened. You held eye contact. You were there.' }
+  ];
+
+  const PRAISE_POOL = [
+    'That\'s Daddy.',
+    'Authority earned.',
+    'Discipline noted.',
+    'You held the line.',
+    'Consistent. Powerful.',
+    'This is how it\'s built.',
+    'No shortcuts. Just you.',
+    'Strength isn\'t loud.',
+    'The structure holds.',
+    'Good man.',
+  ];
+
+  const TIER_MESSAGES = [
+    '',
+    'One down. Keep going.',
+    'Halfway. Don\'t break now.',
+    'Almost there. Finish it.',
+    ''
+  ];
+
+  const FULL_PRAISE = [
+    'All four. That\'s Daddy. That\'s authority.',
+    'Every discipline complete. You earned this.',
+    'Full control. Full presence. Full power.',
+    'The leather fits today.',
+    'Nothing left undone. This is who you are.',
+  ];
+
+  const JOURNAL_PROMPTS = [
+    'What did you hold today?',
+    'Where did you lead, and where did you follow?',
+    'What boundary did you set or honor?',
+    'What does your discipline feel like right now?',
+    'Who needed you today, and how did you show up?',
+  ];
+
+  const TITLES = [
+    { min: 0, label: 'Unproven', css: '' },
+    { min: 3, label: 'Steady', css: 'elevated' },
+    { min: 7, label: 'Disciplined', css: 'elevated' },
+    { min: 14, label: 'Dominant', css: 'elevated' },
+    { min: 21, label: 'Patriarch', css: 'crowned' },
+    { min: 30, label: 'Daddy', css: 'crowned' },
+  ];
+
+  function getTitle(streak) {
+    let title = TITLES[0];
+    for (const t of TITLES) {
+      if (streak >= t.min) title = t;
+    }
+    return title;
+  }
+
+  function randomFrom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function dayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem('daddy-dom-rituals');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data.checked || {};
+    } catch { return {}; }
+  }
+
+  function saveState(checked) {
+    localStorage.setItem('daddy-dom-rituals', JSON.stringify({
+      date: dayKey(),
+      checked: checked
+    }));
+  }
+
+  function loadStreak() {
+    try {
+      const raw = localStorage.getItem('daddy-dom-streak');
+      if (!raw) return { count: 0, lastDate: null };
+      return JSON.parse(raw);
+    } catch { return { count: 0, lastDate: null }; }
+  }
+
+  function saveStreak(streak) {
+    localStorage.setItem('daddy-dom-streak', JSON.stringify(streak));
+  }
+
+  function loadJournal() {
+    try {
+      const raw = localStorage.getItem('daddy-dom-journal');
+      if (!raw) return {};
+      const data = JSON.parse(raw);
+      if (data.date !== dayKey()) return {};
+      return data;
+    } catch { return {}; }
+  }
+
+  function saveJournalEntry(text) {
+    const entries = JSON.parse(localStorage.getItem('daddy-dom-journal-history') || '[]');
+    entries.push({ date: dayKey(), text: text, timestamp: new Date().toISOString() });
+    localStorage.setItem('daddy-dom-journal-history', JSON.stringify(entries));
+    localStorage.setItem('daddy-dom-journal', JSON.stringify({ date: dayKey(), text: text, saved: true }));
+  }
+
+  let state = loadState();
+  let praisePicks = {};
+  RITUALS.forEach(r => { praisePicks[r.key] = randomFrom(PRAISE_POOL); });
+
+  function updateStreak() {
+    const count = RITUALS.filter(r => state[r.key]).length;
+    if (count < 4) return;
+
+    const streak = loadStreak();
+    const today = dayKey();
+
+    if (streak.lastDate === today) return;
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = yesterday.toISOString().slice(0, 10);
+
+    if (streak.lastDate === yesterdayKey) {
+      streak.count += 1;
+    } else if (streak.lastDate !== today) {
+      streak.count = 1;
+    }
+
+    streak.lastDate = today;
+    saveStreak(streak);
+  }
+
+  function renderRituals() {
+    const grid = document.getElementById('ritualsGrid');
+    grid.innerHTML = RITUALS.map(r => {
+      const isChecked = state[r.key] ? ' checked' : '';
+      const praise = praisePicks[r.key] || 'Authority earned.';
+      return '<div class="ritual-card' + isChecked + '" data-key="' + r.key + '" onclick="toggleRitual(\'' + r.key + '\', this)">' +
+        '<div class="ritual-card-top">' +
+          '<div class="ritual-checkbox"><span class="check-icon">&check;</span></div>' +
+          '<div class="ritual-name">' + r.name + '</div>' +
+        '</div>' +
+        '<div class="ritual-desc">' + r.desc + '</div>' +
+        '<div class="ritual-affirm">' + praise + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function toggleRitual(key, card) {
+    state[key] = !state[key];
+    saveState(state);
+
+    if (state[key]) {
+      praisePicks[key] = randomFrom(PRAISE_POOL);
+      spawnEmber(card);
+    }
+
+    updateStreak();
+    renderAll();
+  }
+
+  function spawnEmber(card) {
+    const ember = document.createElement('span');
+    ember.className = 'ember';
+    ember.textContent = '\u25C6';
+    ember.style.color = '#c9a96e';
+    ember.style.left = (Math.random() * 60 + 20) + '%';
+    ember.style.bottom = '20%';
+    card.appendChild(ember);
+    setTimeout(() => ember.remove(), 1000);
+  }
+
+  function renderAvatar() {
+    const count = RITUALS.filter(r => state[r.key]).length;
+    const streak = loadStreak();
+    const title = getTitle(streak.count);
+
+    const titleEl = document.getElementById('avatarTitle');
+    titleEl.textContent = title.label;
+    titleEl.className = 'avatar-title' + (title.css ? ' ' + title.css : '');
+
+    const wrap = document.getElementById('avatarWrap');
+    wrap.classList.remove('aura-1', 'aura-2', 'aura-3', 'aura-4');
+    if (count > 0) wrap.classList.add('aura-' + Math.min(count, 4));
+
+    const vest = document.getElementById('avatarVest');
+    const belt = document.getElementById('avatarBelt');
+    const watch = document.getElementById('avatarWatch');
+    const ring = document.getElementById('avatarRing');
+    const bootL = document.getElementById('avatarBootL');
+    const bootR = document.getElementById('avatarBootR');
+    const armL = document.getElementById('avatarArmL');
+    const armR = document.getElementById('avatarArmR');
+    const sparkles = document.getElementById('avatarSparkles');
+    const rewardText = document.getElementById('avatarRewardText');
+
+    // Reset
+    vest.classList.remove('show');
+    belt.classList.remove('show');
+    watch.classList.remove('show');
+    ring.classList.remove('show');
+    bootL.classList.remove('show');
+    bootR.classList.remove('show');
+    armL.classList.remove('sleeved');
+    armR.classList.remove('sleeved');
+    sparkles.classList.remove('show');
+    rewardText.classList.remove('show', 'tier');
+
+    // Tier 1: Watch (time discipline)
+    if (count >= 1) {
+      watch.classList.add('show');
+    }
+
+    // Tier 2: Leather vest + rolled sleeves
+    if (count >= 2) {
+      vest.classList.add('show');
+      armL.classList.add('sleeved');
+      armR.classList.add('sleeved');
+    }
+
+    // Tier 3: Belt + boots
+    if (count >= 3) {
+      belt.classList.add('show');
+      bootL.classList.add('show');
+      bootR.classList.add('show');
+    }
+
+    // Tier 4: Full — ring + sparkles + praise
+    if (count >= 4) {
+      ring.classList.add('show');
+      sparkles.classList.add('show');
+      rewardText.textContent = randomFrom(FULL_PRAISE);
+      rewardText.classList.add('show');
+    } else if (count > 0) {
+      rewardText.textContent = TIER_MESSAGES[count];
+      rewardText.classList.add('show', 'tier');
+    }
+  }
+
+  function renderProgress() {
+    const count = RITUALS.filter(r => state[r.key]).length;
+    const fill = document.getElementById('progressFill');
+    const text = document.getElementById('progressText');
+
+    fill.style.width = (count / 4 * 100) + '%';
+
+    if (count === 4) {
+      fill.classList.add('full');
+      text.className = 'progress-text complete';
+      text.textContent = 'Full authority today.';
+    } else {
+      fill.classList.remove('full');
+      text.className = 'progress-text';
+      text.textContent = count + ' of 4 disciplines complete';
+    }
+  }
+
+  function renderStreak() {
+    const streak = loadStreak();
+    const badge = document.getElementById('streakBadge');
+    const text = document.getElementById('streakText');
+
+    if (streak.count > 0) {
+      badge.classList.add('show');
+      text.textContent = 'Day ' + streak.count + ' streak';
+    } else {
+      badge.classList.remove('show');
+    }
+  }
+
+  function renderJournal() {
+    const count = RITUALS.filter(r => state[r.key]).length;
+    const section = document.getElementById('journalSection');
+    const saved = loadJournal();
+
+    if (count === 4) {
+      section.classList.remove('hidden');
+      document.getElementById('journalPrompt').textContent = randomFrom(JOURNAL_PROMPTS);
+      if (saved.saved) {
+        document.getElementById('journalInput').value = saved.text || '';
+        document.getElementById('journalSaveBtn').textContent = 'Sealed';
+        document.getElementById('journalSaveBtn').classList.add('saved');
+      }
+    } else {
+      section.classList.add('hidden');
+    }
+  }
+
+  function saveJournal() {
+    const input = document.getElementById('journalInput');
+    const text = input.value.trim();
+    if (!text) return;
+    saveJournalEntry(text);
+    const btn = document.getElementById('journalSaveBtn');
+    btn.textContent = 'Sealed';
+    btn.classList.add('saved');
+  }
+
+  function renderAll() {
+    renderRituals();
+    renderAvatar();
+    renderProgress();
+    renderStreak();
+    renderJournal();
+  }
+
+  function showResetModal() {
+    document.getElementById('resetModal').classList.add('open');
+  }
+
+  function closeResetModal() {
+    document.getElementById('resetModal').classList.remove('open');
+  }
+
+  function confirmReset() {
+    state = {};
+    saveState(state);
+    praisePicks = {};
+    RITUALS.forEach(r => { praisePicks[r.key] = randomFrom(PRAISE_POOL); });
+    renderAll();
+    closeResetModal();
+  }
+
+  document.getElementById('resetModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeResetModal();
+  });
+
+  renderAll();
+
+  window.addEventListener('focus', () => {
+    const fresh = loadState();
+    if (Object.keys(fresh).length === 0 && Object.keys(state).length > 0) {
+      state = fresh;
+      renderAll();
+    }
+  });
+</script>
+
+</body>
+</html>
