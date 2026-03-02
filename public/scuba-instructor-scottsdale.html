@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desert Dive Academy - Scuba Instructor Scottsdale Arizona | PADI Certified Diving Lessons</title>
-    <meta name="description" content="Expert PADI certified scuba instructor in Scottsdale, Arizona. Learn to dive with personalized lessons, open water certification, and advanced diving courses. Safe, professional scuba training.">
-    <meta name="keywords" content="scuba instructor Scottsdale, PADI certification Arizona, scuba lessons Scottsdale, diving instructor Phoenix, learn to dive Arizona">
-    <meta property="og:title" content="Desert Dive Academy - Premier Scuba Instructor in Scottsdale, Arizona">
-    <meta property="og:description" content="Professional PADI certified scuba diving instruction in Scottsdale. From beginner to advanced certifications.">
+    <title>Desert Dive Academy - Premier Scuba Instructor in Scottsdale, Arizona | PADI Certified</title>
+    <meta name="description" content="Professional scuba diving instruction in Scottsdale, Arizona. PADI certified courses, open water certification, and advanced diving training. Expert local instructor.">
+    <meta name="keywords" content="scuba diving Scottsdale, PADI instructor Arizona, diving lessons Scottsdale, scuba certification Phoenix, diving courses Arizona">
+    <meta name="author" content="Desert Dive Academy">
+    <meta property="og:title" content="Desert Dive Academy - Premier Scuba Instructor in Scottsdale">
+    <meta property="og:description" content="Professional scuba diving instruction in Scottsdale, Arizona. PADI certified courses and expert training.">
     <meta property="og:type" content="website">
-    <link rel="canonical" href="https://desertdiveacademy.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -18,17 +21,20 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #1a1714;
-            color: #e8e0d8;
-            line-height: 1.6;
-            overflow-x: hidden;
+        :root {
+            --bg: #1a1714;
+            --surface: #252220;
+            --accent: #c4956a;
+            --text: #e8e0d8;
+            --text-muted: #a8a29e;
         }
 
-        h1, h2, h3 {
-            font-family: 'Lora', serif;
-            color: #c4956a;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -37,38 +43,26 @@
             padding: 0 20px;
         }
 
-        .card {
-            background: #252220;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .fade-up {
+        .fadeUp {
             opacity: 0;
             transform: translateY(30px);
-            animation: fadeUp 0.8s ease forwards;
+            transition: all 0.8s ease;
         }
 
-        @keyframes fadeUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .fadeUp.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         header {
-            background: linear-gradient(135deg, #1a1714 0%, #252220 100%);
-            padding: 20px 0;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #c4956a;
+            width: 100%;
+            background: rgba(26, 23, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--surface);
         }
 
         nav {
@@ -79,226 +73,225 @@
 
         .logo {
             font-family: 'Lora', serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: #c4956a;
+            color: var(--accent);
         }
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 2rem;
             list-style: none;
         }
 
         .nav-links a {
-            color: #e8e0d8;
+            color: var(--text);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: color 0.3s;
         }
 
         .nav-links a:hover {
-            color: #c4956a;
+            color: var(--accent);
         }
 
         .mobile-menu {
             display: none;
-            background: none;
-            border: none;
-            color: #e8e0d8;
-            font-size: 1.5rem;
+            flex-direction: column;
             cursor: pointer;
         }
 
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--text);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
         .hero {
-            background: linear-gradient(rgba(26,23,20,0.8), rgba(26,23,20,0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="ocean" patternUnits="userSpaceOnUse" width="60" height="60"><path d="M0,30 Q15,20 30,30 T60,30" stroke="%23c4956a" stroke-width="2" fill="none" opacity="0.3"/></pattern></defs><rect width="100%25" height="100%25" fill="%23252220"/><rect width="100%25" height="100%25" fill="url(%23ocean)"/></svg>');
-            min-height: 80vh;
+            height: 100vh;
+            background: linear-gradient(rgba(26, 23, 20, 0.7), rgba(26, 23, 20, 0.7)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="water" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%2315547a"/><stop offset="50%" stop-color="%23236b8c"/><stop offset="100%" stop-color="%231a4f73"/></linearGradient></defs><rect width="1200" height="800" fill="url(%23water)"/><circle cx="300" cy="200" r="80" fill="%23c4956a" opacity="0.1"/><circle cx="800" cy="300" r="60" fill="%23c4956a" opacity="0.15"/><circle cx="500" cy="500" r="100" fill="%23c4956a" opacity="0.08"/></svg>') center/cover;
             display: flex;
             align-items: center;
-            text-align: center;
-            padding: 100px 0;
+            position: relative;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            animation-delay: 0.2s;
+        .hero-content {
+            max-width: 600px;
         }
 
-        .hero-content .subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            color: #e8e0d8;
-            animation-delay: 0.4s;
+        .hero h1 {
+            font-family: 'Lora', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-muted);
         }
 
         .cta-button {
             display: inline-block;
-            background: #c4956a;
-            color: #1a1714;
-            padding: 15px 30px;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            border-radius: 50px;
             text-decoration: none;
-            border-radius: 8px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            animation-delay: 0.6s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(196, 149, 106, 0.3);
         }
 
         .cta-button:hover {
-            background: #d4a67a;
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(196, 149, 106, 0.4);
         }
 
         .section {
-            padding: 80px 0;
+            padding: 5rem 0;
         }
 
-        .section h2 {
-            text-align: center;
+        .section-title {
+            font-family: 'Lora', serif;
             font-size: 2.5rem;
-            margin-bottom: 50px;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--accent);
         }
 
-        .features-grid {
+        .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
-        .feature-card {
-            padding: 40px 30px;
-            text-align: center;
+        .card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(196, 149, 106, 0.1);
+            transition: all 0.3s;
         }
 
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: #c4956a;
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .instructor-profile {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
-            color: #1a1714;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .course-card {
-            padding: 30px;
-        }
-
-        .course-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .course-price {
-            background: #c4956a;
-            color: #1a1714;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            display: inline-block;
-            margin: 15px 0;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .instructor-image {
-            width: 100%;
-            height: 400px;
-            background: linear-gradient(45deg, #c4956a, #d4a67a);
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent), #a67c52);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 4rem;
-            color: #1a1714;
-        }
-
-        .contact-form {
-            max-width: 600px;
+            color: var(--bg);
             margin: 0 auto;
         }
 
+        .certifications {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .cert-badge {
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .contact-form {
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 15px;
+            border: 1px solid rgba(196, 149, 106, 0.1);
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
             font-weight: 500;
-            color: #c4956a;
         }
 
         .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group textarea {
             width: 100%;
-            padding: 12px;
-            background: #252220;
-            border: 1px solid #c4956a;
+            background: var(--bg);
+            border: 1px solid rgba(196, 149, 106, 0.3);
             border-radius: 8px;
-            color: #e8e0d8;
+            padding: 1rem;
+            color: var(--text);
             font-family: inherit;
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: #c4956a;
-            color: #1a1714;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            background: #d4a67a;
-        }
-
-        .location-info {
-            background: #252220;
-            padding: 40px;
-            border-radius: 12px;
-            margin: 40px 0;
-            text-align: center;
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(196, 149, 106, 0.1);
         }
 
         footer {
-            background: #252220;
-            padding: 40px 0;
+            background: var(--surface);
+            padding: 3rem 0;
             text-align: center;
-            border-top: 1px solid #c4956a;
+            border-top: 1px solid rgba(196, 149, 106, 0.1);
         }
 
-        .schema-org {
-            display: none;
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
         }
 
         @media (max-width: 768px) {
@@ -307,74 +300,34 @@
             }
 
             .mobile-menu {
-                display: block;
+                display: flex;
             }
 
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .about-content {
+            .instructor-profile {
                 grid-template-columns: 1fr;
-                gap: 30px;
+                text-align: center;
             }
 
-            .courses-grid,
-            .features-grid {
+            .profile-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .cards {
                 grid-template-columns: 1fr;
             }
+
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+
+        .schema-markup {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Desert Dive Academy",
-        "description": "PADI certified scuba diving instructor in Scottsdale, Arizona offering comprehensive diving courses and certifications.",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Scottsdale",
-            "addressLocality": "Scottsdale",
-            "addressRegion": "Arizona",
-            "postalCode": "85251",
-            "addressCountry": "US"
-        },
-        "telephone": "+1-480-555-DIVE",
-        "email": "info@desertdiveacademy.com",
-        "url": "https://desertdiveacademy.com",
-        "priceRange": "$$",
-        "serviceArea": "Scottsdale, Phoenix, Arizona",
-        "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Scuba Diving Courses",
-            "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Open Water Certification",
-                        "description": "Complete PADI Open Water Diver certification course"
-                    },
-                    "price": "450",
-                    "priceCurrency": "USD"
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Advanced Open Water",
-                        "description": "PADI Advanced Open Water Diver certification"
-                    },
-                    "price": "350",
-                    "priceCurrency": "USD"
-                }
-            ]
-        }
-    }
-    </script>
-
     <header>
         <nav class="container">
             <div class="logo">Desert Dive Academy</div>
@@ -384,175 +337,311 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="mobile-menu">☰</button>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </nav>
     </header>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="fade-up">Premier Scuba Instructor in Scottsdale</h1>
-                    <p class="subtitle fade-up">PADI Certified • Expert Training • Safe Diving Adventures</p>
-                    <a href="#contact" class="cta-button fade-up">Start Your Diving Journey</a>
-                </div>
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content fadeUp">
+                <h1>Professional Scuba Diving Instruction in Scottsdale</h1>
+                <p>Discover the underwater world with Arizona's premier PADI certified scuba instructor. From beginner to advanced certifications, we make diving dreams come true.</p>
+                <a href="#contact" class="cta-button">Book Your Course Today</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section">
-            <div class="container">
-                <h2 class="fade-up">Why Choose Desert Dive Academy?</h2>
-                <div class="features-grid">
-                    <div class="card feature-card fade-up">
-                        <div class="feature-icon">🏆</div>
-                        <h3>PADI Certified Instructor</h3>
-                        <p>Master Scuba Diver Trainer with over 1,000 successful certifications and 15 years of diving experience.</p>
-                    </div>
-                    <div class="card feature-card fade-up">
-                        <div class="feature-icon">🎯</div>
-                        <h3>Personalized Training</h3>
-                        <p>Small class sizes and individualized attention ensure you learn at your own pace with confidence.</p>
-                    </div>
-                    <div class="card feature-card fade-up">
-                        <div class="feature-icon">🛡️</div>
-                        <h3>Safety First Approach</h3>
-                        <p>Rigorous safety protocols and emergency response training keep you prepared for any situation.</p>
-                    </div>
+    <section id="courses" class="section">
+        <div class="container">
+            <h2 class="section-title fadeUp">Scuba Diving Courses</h2>
+            <div class="cards">
+                <div class="card fadeUp">
+                    <h3>Open Water Diver</h3>
+                    <p>Start your diving journey with our comprehensive Open Water certification course. Learn essential skills in our heated pool before progressing to open water dives.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-muted);">
+                        <li>4 confined water dives</li>
+                        <li>4 open water dives</li>
+                        <li>Digital learning materials</li>
+                        <li>All equipment included</li>
+                    </ul>
+                </div>
+                <div class="card fadeUp">
+                    <h3>Advanced Open Water</h3>
+                    <p>Expand your diving skills with 5 different adventure dives including deep diving, navigation, and specialty areas of interest.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-muted);">
+                        <li>5 adventure dives</li>
+                        <li>Deep & navigation required</li>
+                        <li>Choose 3 elective dives</li>
+                        <li>Immediate certification</li>
+                    </ul>
+                </div>
+                <div class="card fadeUp">
+                    <h3>Rescue Diver</h3>
+                    <p>Learn to prevent and manage problems underwater. This challenging course builds confidence and makes you a better buddy.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-muted);">
+                        <li>Self-rescue techniques</li>
+                        <li>Recognizing stress in others</li>
+                        <li>Emergency management</li>
+                        <li>Rescue scenarios</li>
+                    </ul>
+                </div>
+                <div class="card fadeUp">
+                    <h3>Specialty Courses</h3>
+                    <p>Enhance your diving with specialty courses including Nitrox, Deep Diver, Wreck Diver, and Underwater Photography.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-muted);">
+                        <li>Nitrox (EANx)</li>
+                        <li>Deep Diver</li>
+                        <li>Wreck Diver</li>
+                        <li>Underwater Photography</li>
+                    </ul>
+                </div>
+                <div class="card fadeUp">
+                    <h3>Refresher Course</h3>
+                    <p>Been a while since your last dive? Our refresher course helps you regain confidence and update your skills safely.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-muted);">
+                        <li>Skills review</li>
+                        <li>Equipment familiarization</li>
+                        <li>Pool session</li>
+                        <li>Open water dive</li>
+                    </ul>
+                </div>
+                <div class="card fadeUp">
+                    <h3>Discover Scuba</h3>
+                    <p>Try scuba diving in a pool or shallow water with this introductory experience. Perfect for beginners wanting to test the waters.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-muted);">
+                        <li>No experience required</li>
+                        <li>Pool or shallow water</li>
+                        <li>Basic safety introduction</li>
+                        <li>Certified instructor supervision</li>
+                    </ul>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="courses" class="section" style="background: #252220;">
-            <div class="container">
-                <h2 class="fade-up">Scuba Diving Courses</h2>
-                <div class="courses-grid">
-                    <div class="card course-card fade-up">
-                        <h3>Open Water Certification</h3>
-                        <p>Your gateway to the underwater world. Learn fundamental diving skills, safety procedures, and earn your PADI Open Water Diver certification.</p>
-                        <div class="course-price">$450</div>
-                        <ul style="margin: 15px 0; padding-left: 20px;">
-                            <li>Theory and confined water training</li>
-                            <li>4 open water certification dives</li>
-                            <li>All equipment included</li>
-                            <li>Digital certification card</li>
-                        </ul>
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title fadeUp">Meet Your Instructor</h2>
+            <div class="instructor-profile">
+                <div class="fadeUp">
+                    <div class="profile-image">🤿</div>
+                </div>
+                <div class="fadeUp">
+                    <h3 style="font-family: 'Lora', serif; font-size: 2rem; color: var(--accent); margin-bottom: 1rem;">Mike Rodriguez</h3>
+                    <p style="margin-bottom: 1.5rem;">With over 15 years of diving experience and 8 years as a certified PADI instructor, Mike brings passion, safety, and expertise to every course. Based in Scottsdale, he's taught hundreds of students from complete beginners to advanced divers.</p>
+                    <div class="certifications">
+                        <span class="cert-badge">PADI Master Instructor</span>
+                        <span class="cert-badge">EFR Instructor</span>
+                        <span class="cert-badge">Nitrox Instructor</span>
+                        <span class="cert-badge">Deep Specialty Instructor</span>
+                        <span class="cert-badge">Wreck Specialty Instructor</span>
                     </div>
-                    <div class="card course-card fade-up">
-                        <h3>Advanced Open Water</h3>
-                        <p>Expand your diving skills with specialty dives including deep diving, navigation, and three additional adventure dives of your choice.</p>
-                        <div class="course-price">$350</div>
-                        <ul style="margin: 15px 0; padding-left: 20px;">
-                            <li>5 adventure dives</li>
-                            <li>Deep diving specialty</li>
-                            <li>Underwater navigation</li>
-                            <li>Choice of 3 additional specialties</li>
-                        </ul>
-                    </div>
-                    <div class="card course-card fade-up">
-                        <h3>Rescue Diver</h3>
-                        <p>Develop problem prevention and accident management skills. Learn to assist other divers and handle emergency situations.</p>
-                        <div class="course-price">$400</div>
-                        <ul style="margin: 15px 0; padding-left: 20px;">
-                            <li>Self-rescue techniques</li>
-                            <li>Stress recognition and management</li>
-                            <li>Emergency action plans</li>
-                            <li>Rescue scenarios training</li>
-                        </ul>
-                    </div>
-                    <div class="card course-card fade-up">
-                        <h3>Specialty Courses</h3>
-                        <p>Enhance specific skills with specialty courses including Nitrox, Night Diving, Wreck Diving, and Underwater Photography.</p>
-                        <div class="course-price">From $200</div>
-                        <ul style="margin: 15px 0; padding-left: 20px;">
-                            <li>Enriched Air (Nitrox)</li>
-                            <li>Night & Limited Visibility</li>
-                            <li>Wreck Diving</li>
-                            <li>Digital Underwater Photography</li>
-                        </ul>
-                    </div>
+                    <p style="color: var(--text-muted);">"My goal is to create confident, safe divers who can enjoy the underwater world for years to come. Every student gets personalized attention and progresses at their own pace."</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="about" class="section">
-            <div class="container">
-                <div class="about-content">
-                    <div class="instructor-image fade-up">🤿</div>
-                    <div class="fade-up">
-                        <h2>Meet Your Instructor</h2>
-                        <h3 style="color: #c4956a; margin-bottom: 20px;">Captain Mike Rodriguez</h3>
-                        <p style="margin-bottom: 20px;">With over 15 years of diving experience and 1,000+ successful certifications, Captain Mike brings unparalleled expertise to Desert Dive Academy. As a PADI Master Scuba Diver Trainer, he's dedicated to creating safe, enjoyable, and educational diving experiences.</p>
-                        <p style="margin-bottom: 20px;"><strong>Certifications:</strong> PADI Master Scuba Diver Trainer, EFR Instructor, Nitrox Instructor, Deep Diver Specialty Instructor</p>
-                        <p><strong>Experience:</strong> 3,000+ logged dives across Caribbean, Pacific, and Red Sea destinations. Former dive shop manager and underwater photographer.</p>
-                    </div>
+    <section class="section" style="background: var(--surface);">
+        <div class="container">
+            <h2 class="section-title fadeUp">Why Choose Desert Dive Academy?</h2>
+            <div class="cards">
+                <div class="card fadeUp" style="background: var(--bg);">
+                    <h3>🏊‍♂️ Heated Pool Training</h3>
+                    <p>Learn comfortably year-round in our partner facility's heated pool. Perfect Arizona weather means diving season never ends.</p>
+                </div>
+                <div class="card fadeUp" style="background: var(--bg);">
+                    <h3>🎯 Small Class Sizes</h3>
+                    <p>Maximum 4 students per instructor ensures personalized attention and faster skill development for every student.</p>
+                </div>
+                <div class="card fadeUp" style="background: var(--bg);">
+                    <h3>🏜️ Local Dive Sites</h3>
+                    <p>Explore Arizona's hidden underwater gems including Lake Pleasant, Saguaro Lake, and other pristine desert diving locations.</p>
+                </div>
+                <div class="card fadeUp" style="background: var(--bg);">
+                    <h3>🛡️ Safety First</h3>
+                    <p>Comprehensive safety protocols, modern equipment, and emergency first aid training ensure your diving experience is both fun and secure.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section" style="background: #252220;">
-            <div class="container">
-                <div class="location-info fade-up">
-                    <h2>Serving Scottsdale & Greater Phoenix Area</h2>
-                    <p style="margin: 20px 0;">Conveniently located in Scottsdale, Arizona, Desert Dive Academy serves divers throughout the Phoenix metropolitan area. Our pool training sessions are conducted at climate-controlled facilities, and open water certifications take place at pristine Arizona lakes and training sites.</p>
-                    <p><strong>Training Locations:</strong> Lake Pleasant, Tempe Town Lake, Local Pool Facilities</p>
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title fadeUp">Start Your Diving Adventure</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
+                <div class="fadeUp">
+                    <div class="contact-form">
+                        <h3 style="color: var(--accent); margin-bottom: 1.5rem;">Book Your Course</h3>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="course">Course Interest</label>
+                                <select id="course" name="course" style="width: 100%; background: var(--bg); border: 1px solid rgba(196, 149, 106, 0.3); border-radius: 8px; padding: 1rem; color: var(--text);">
+                                    <option>Open Water Diver</option>
+                                    <option>Advanced Open Water</option>
+                                    <option>Rescue Diver</option>
+                                    <option>Specialty Course</option>
+                                    <option>Refresher Course</option>
+                                    <option>Discover Scuba</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Questions or Special Requests</label>
+                                <textarea id="message" name="message" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="cta-button" style="width: 100%; text-align: center; border: none; cursor: pointer;">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="fadeUp">
+                    <div style="background: var(--surface); padding: 2rem; border-radius: 15px; border: 1px solid rgba(196, 149, 106, 0.1);">
+                        <h3 style="color: var(--accent); margin-bottom: 1.5rem;">Contact Information</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--accent);">📍 Service Area:</strong><br>
+                            Scottsdale, Phoenix, Tempe, Mesa, Chandler
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--accent);">📞 Phone:</strong><br>
+                            <a href="tel:+14805551234" style="color: var(--text); text-decoration: none;">(480) 555-1234</a>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <strong style="color: var(--accent);">📧 Email:</strong><br>
+                            <a href="mailto:mike@desertdiveacademy.com" style="color: var(--text); text-decoration: none;">mike@desertdiveacademy.com</a>
+                        </div>
+                        <div style="margin-bottom: 2rem;">
+                            <strong style="color: var(--accent);">⏰ Hours:</strong><br>
+                            Mon-Fri: 6 AM - 8 PM<br>
+                            Sat-Sun: 7 AM - 6 PM
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent); margin-bottom: 1rem;">Certification Bodies</h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span style="background: var(--accent); color: var(--bg); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">PADI</span>
+                                <span style="background: var(--accent); color: var(--bg); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">EFR</span>
+                                <span style="background: var(--accent); color: var(--bg); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">DAN</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section id="contact" class="section">
-            <div class="container">
-                <h2 class="fade-up">Ready to Dive In?</h2>
-                <form class="contact-form fade-up" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="course">Course Interest</label>
-                        <select id="course" name="course">
-                            <option value="">Select a course...</option>
-                            <option value="open-water">Open Water Certification</option>
-                            <option value="advanced">Advanced Open Water</option>
-                            <option value="rescue">Rescue Diver</option>
-                            <option value="specialty">Specialty Course</option>
-                            <option value="refresher">Refresher Course</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" placeholder="Tell us about your diving goals and any questions you have..."></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Send Message</button>
-                </form>
-                
-                <div class="location-info fade-up" style="margin-top: 50px;">
-                    <h3>Contact Information</h3>
-                    <p><strong>Phone:</strong> <a href="tel:+14805554483" style="color: #c4956a;">(480) 555-DIVE</a></p>
-                    <p><strong>Email:</strong> <a href="mailto:info@desertdiveacademy.com" style="color: #c4956a;">info@desertdiveacademy.com</a></p>
-                    <p><strong>Service Area:</strong> Scottsdale, Phoenix, Tempe, Mesa, and surrounding areas</p>
-                    <p style="margin-top: 20px;"><em>Flexible scheduling available including evenings and weekends</em></p>
-                </div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Desert Dive Academy. All rights reserved. | PADI Certified Scuba Instructor | Scottsdale, Arizona</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">Professional scuba diving instruction and certification courses in Scottsdale, Phoenix, and throughout Arizona.</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Desert Dive Academy</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Premier scuba diving instruction in Scottsdale, Arizona. PADI certified courses for all levels.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#courses">Course Catalog</a>
+                    <a href="#about">About the Instructor</a>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#booking">Book a Course</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Service Areas</h4>
+                    <a href="#">Scottsdale Scuba Lessons</a>
+                    <a href="#">Phoenix Dive Training</a>
+                    <a href="#">Tempe PADI Courses</a>
+                    <a href="#">Mesa Diving Instruction</a>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(196, 149, 106, 0.1); padding-top: 2rem; color: var(--text-muted);">
+                <p>&copy; 2024 Desert Dive Academy. All rights reserved. PADI Certified Instruction in Scottsdale, Arizona.</p>
+            </div>
         </div>
     </footer>
 
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json" class="schema-markup">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Desert Dive Academy",
+        "description": "Professional scuba diving instruction in Scottsdale, Arizona. PADI certified courses from beginner to advanced levels.",
+        "url": "https://desertdiveacademy.com",
+        "telephone": "+14805551234",
+        "email": "mike@desertdiveacademy.com",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Scottsdale",
+            "addressRegion": "Arizona",
+            "addressCountry": "US"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 33.4942,
+            "longitude": -111.9261
+        },
+        "openingHours": [
+            "Mo-Fr 06:00-20:00",
+            "Sa-Su 07:00-18:00"
+        ],
+        "serviceArea": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": 33.4942,
+                "longitude": -111.9261
+            },
+            "geoRadius": "50000"
+        },
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Scuba Diving Courses",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Course",
+                        "name": "PADI Open Water Diver",
+                        "description": "Entry-level scuba diving certification course"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Course",
+                        "name": "PADI Advanced Open Water",
+                        "description": "Advanced scuba diving skills and specialty training"
+                    }
+                }
+            ]
+        },
+        "founder": {
+            "@type": "Person",
+            "name": "Mike Rodriguez",
+            "jobTitle": "PADI Master Instructor",
+            "hasCredential": [
+                "PADI Master Instructor",
+                "EFR Instructor",
+                "Nitrox Instructor"
+            ]
+        }
+    }
+    </script>
+
     <script>
-        // Intersection Observer for fade-up animations
+        // Fade up animation on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -561,14 +650,12 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animationDelay = '0s';
-                    entry.target.classList.add('fade-up');
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
-        // Observe all elements that should animate
-        document.querySelectorAll('.fade-up, .card, h2, h1, .subtitle, .cta-button').forEach(el => {
+        document.querySelectorAll('.fadeUp').forEach(el => {
             observer.observe(el);
         });
 
@@ -586,10 +673,11 @@
             });
         });
 
-        // Contact form handling
+        // Form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Store form data in localStorage
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -599,37 +687,44 @@
                 timestamp: new Date().toISOString()
             };
             
-            // Store inquiry in localStorage
-            const inquiries = JSON.parse(localStorage.getItem('diveInquiries') || '[]');
-            inquiries.push(formData);
-            localStorage.setItem('diveInquiries', JSON.stringify(inquiries));
+            localStorage.setItem('lastInquiry', JSON.stringify(formData));
             
             // Show success message
-            const submitBtn = document.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Message Sent! We\'ll contact you soon.';
-            submitBtn.style.background = '#4CAF50';
+            const button = document.querySelector('#contactForm button');
+            const originalText = button.textContent;
+            button.textContent = 'Message Sent Successfully!';
+            button.style.background = '#22c55e';
             
-            // Reset form
-            this.reset();
-            
-            // Reset button after 3 seconds
             setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.style.background = '#c4956a';
+                button.textContent = originalText;
+                button.style.background = 'var(--accent)';
+                this.reset();
             }, 3000);
         });
 
         // Mobile menu toggle (basic implementation)
         document.querySelector('.mobile-menu').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'var(--surface)';
+                navLinks.style.padding = '1rem';
+                navLinks.style.borderTop = '1px solid var(--accent)';
+            }
         });
 
-        // Add loading state management
-        window.addEventListener('load', function() {
-            document.body.style.opacity = '1';
-            document.body.style.transition = 'opacity 0.5s ease';
+        // Auto-hide mobile menu on larger screens
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.querySelector('.nav-links').style.display = '';
+            }
         });
     </script>
 </body>
