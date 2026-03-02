@@ -118,16 +118,66 @@
   .grid .demo-card:nth-child(6) { animation: fadeUp 0.8s ease 0.8s both; }
   .grid .demo-card:nth-child(7) { animation: fadeUp 0.8s ease 0.9s both; }
   .grid .demo-card:nth-child(8) { animation: fadeUp 0.8s ease 1.0s both; }
-  .grid .demo-card:nth-child(9) { animation: fadeUp 0.8s ease 1.1s both; }
-  .grid .demo-card:nth-child(10) { animation: fadeUp 0.8s ease 1.2s both; }
-
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Hidden section */
+  .hidden-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    animation: fadeUp 0.8s ease 1.3s both;
+  }
+
+  .hidden-divider:hover .divider-text {
+    color: var(--text-secondary);
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .hidden-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  }
+
+  .hidden-grid.revealed {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  .hidden-grid .demo-card {
+    animation: none;
+    opacity: 1;
+  }
+
   @media (max-width: 500px) {
-    .grid { grid-template-columns: 1fr; }
+    .grid, .hidden-grid { grid-template-columns: 1fr; }
     body { padding: 1.5rem 1rem 3rem; }
   }
 </style>
@@ -141,67 +191,84 @@
   </div>
 
   <div class="grid">
-    <a href="coaching-landing.html" class="demo-card">
-      <span class="arrow">→</span>
+    <a href="coaching-landing.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.3s both;">
+      <span class="arrow">&rarr;</span>
       <div class="title">Coaching Landing Page</div>
       <div class="desc">SEO-optimized landing page for executive coaching services</div>
     </a>
 
-    <a href="solopreneur-journey.html" class="demo-card">
-      <span class="arrow">→</span>
+    <a href="solopreneur-journey.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.4s both;">
+      <span class="arrow">&rarr;</span>
       <div class="title">Solopreneur Journey</div>
       <div class="desc">A solopreneur's path to augmenting their workflow with AI</div>
     </a>
 
-    <a href="anchor-demo.html" class="demo-card">
-      <span class="arrow">→</span>
+    <a href="anchor-demo.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.5s both;">
+      <span class="arrow">&rarr;</span>
       <div class="title">Anchor Demo</div>
       <div class="desc">Demo version of The Anchor dashboard</div>
     </a>
 
-    <a href="mood-tracker.html" class="demo-card">
-      <span class="arrow">→</span>
+    <a href="mood-tracker.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.6s both;">
+      <span class="arrow">&rarr;</span>
       <div class="title">Mood Tracker</div>
       <div class="desc">Daily mood tracking with streak counter</div>
     </a>
 
+    <a href="king.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.7s both;">
+      <span class="arrow">&rarr;</span>
+      <div class="title">The King</div>
+      <div class="desc">Duty, order, and sovereignty</div>
+    </a>
+
+    <a href="warriors.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.8s both;">
+      <span class="arrow">&rarr;</span>
+      <div class="title">The Warrior</div>
+      <div class="desc">Discipline, endurance, and inner fire</div>
+    </a>
+
+    <a href="magician.html" class="demo-card" style="animation: fadeUp 0.8s ease 0.9s both;">
+      <span class="arrow">&rarr;</span>
+      <div class="title">The Magician</div>
+      <div class="desc">Transformation, mastery, and insight</div>
+    </a>
+
+    <a href="lover.html" class="demo-card" style="animation: fadeUp 0.8s ease 1.0s both;">
+      <span class="arrow">&rarr;</span>
+      <div class="title">Presence &amp; Connection</div>
+      <div class="desc">Cultivating feeling, beauty, and aliveness</div>
+    </a>
+  </div>
+
+  <div class="hidden-divider" onclick="togglePrivate()">
+    <div class="divider-line"></div>
+    <span class="divider-text" id="dividerText">Private</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="hidden-grid" id="hiddenGrid">
     <a href="good-girl.html" class="demo-card">
-      <span class="arrow">→</span>
-      <div class="title">Good Girl App</div>
-      <div class="desc">Ritual tracker and reward system</div>
+      <span class="arrow">&rarr;</span>
+      <div class="title">The Good Girl</div>
+      <div class="desc">Rituals, devotion, and surrender</div>
     </a>
 
     <a href="daddy-dom.html" class="demo-card">
-      <span class="arrow">→</span>
-      <div class="title">Daddy Dom App</div>
-      <div class="desc">Structured care and accountability tracker</div>
-    </a>
-
-    <a href="lover.html" class="demo-card">
-      <span class="arrow">→</span>
-      <div class="title">Lover App</div>
-      <div class="desc">Relationship presence and connection tracker</div>
-    </a>
-
-    <a href="magician.html" class="demo-card">
-      <span class="arrow">→</span>
-      <div class="title">Magician App</div>
-      <div class="desc">Transformation and creative energy tracker</div>
-    </a>
-
-    <a href="warriors.html" class="demo-card">
-      <span class="arrow">→</span>
-      <div class="title">Warriors App</div>
-      <div class="desc">Discipline and warrior archetype tracker</div>
-    </a>
-
-    <a href="king.html" class="demo-card">
-      <span class="arrow">→</span>
-      <div class="title">King App</div>
-      <div class="desc">Sovereignty and daily ritual tracker</div>
+      <span class="arrow">&rarr;</span>
+      <div class="title">The Daddy Dom</div>
+      <div class="desc">Authority, structure, and care</div>
     </a>
   </div>
 </div>
+
+<script>
+  function togglePrivate() {
+    const grid = document.getElementById('hiddenGrid');
+    const text = document.getElementById('dividerText');
+    grid.classList.toggle('revealed');
+    text.textContent = grid.classList.contains('revealed') ? 'Hide' : 'Private';
+  }
+</script>
 
 </body>
 </html>
