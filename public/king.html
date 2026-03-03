@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Knight App</title>
+<title>The King App</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -892,7 +892,7 @@
 <div class="container">
 
   <div class="header">
-    <h1>The Knight App</h1>
+    <h1>The King App</h1>
     <div class="subtitle">Discipline is the sword. Ritual is the armor.</div>
     <div class="tagline">Complete your duties. Earn your throne.</div>
     <div class="streak-badge" id="streakBadge">
@@ -1031,7 +1031,7 @@
 
   const TITLES = [
     { min: 0, label: 'Squire', css: '' },
-    { min: 3, label: 'Knight', css: 'elevated' },
+    { min: 3, label: 'King', css: 'elevated' },
     { min: 7, label: 'Champion', css: 'elevated' },
     { min: 14, label: 'Commander', css: 'elevated' },
     { min: 21, label: 'Warlord', css: 'crowned' },
@@ -1049,7 +1049,7 @@
 
   function loadState() {
     try {
-      const raw = localStorage.getItem('knight-duties');
+      const raw = localStorage.getItem('king-duties');
       if (!raw) return {};
       const data = JSON.parse(raw);
       if (data.date !== dayKey()) return {};
@@ -1058,22 +1058,22 @@
   }
 
   function saveState(checked) {
-    localStorage.setItem('knight-duties', JSON.stringify({ date: dayKey(), checked }));
+    localStorage.setItem('king-duties', JSON.stringify({ date: dayKey(), checked }));
   }
 
   function loadStreak() {
     try {
-      const raw = localStorage.getItem('knight-streak');
+      const raw = localStorage.getItem('king-streak');
       if (!raw) return { count: 0, lastDate: null };
       return JSON.parse(raw);
     } catch { return { count: 0, lastDate: null }; }
   }
 
-  function saveStreak(s) { localStorage.setItem('knight-streak', JSON.stringify(s)); }
+  function saveStreak(s) { localStorage.setItem('king-streak', JSON.stringify(s)); }
 
   function loadJournal() {
     try {
-      const raw = localStorage.getItem('knight-journal');
+      const raw = localStorage.getItem('king-journal');
       if (!raw) return {};
       const data = JSON.parse(raw);
       if (data.date !== dayKey()) return {};
@@ -1082,10 +1082,10 @@
   }
 
   function saveJournalEntry(text) {
-    const entries = JSON.parse(localStorage.getItem('knight-journal-history') || '[]');
+    const entries = JSON.parse(localStorage.getItem('king-journal-history') || '[]');
     entries.push({ date: dayKey(), text, timestamp: new Date().toISOString() });
-    localStorage.setItem('knight-journal-history', JSON.stringify(entries));
-    localStorage.setItem('knight-journal', JSON.stringify({ date: dayKey(), text, saved: true }));
+    localStorage.setItem('king-journal-history', JSON.stringify(entries));
+    localStorage.setItem('king-journal', JSON.stringify({ date: dayKey(), text, saved: true }));
   }
 
   let state = loadState();
