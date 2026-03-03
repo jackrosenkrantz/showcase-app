@@ -1,18 +1,33 @@
 # Showcase App — Claude Code Project Instructions
 
 ## Overview
-This is a static showcase/portfolio site served by Express.js on Railway. It displays demo cards linking to various web experiences hosted as HTML pages in `public/`.
+This is a static showcase/portfolio site served by Express.js on Railway. It uses a **folder/dashboard** navigation structure:
+
+- `index.html` — top-level dashboard with category folder cards
+- `archetypes.html` — dashboard for archetype identity apps
+- `client-work.html` — dashboard for client landing pages and SEO projects
+- `tools.html` — dashboard for utilities, trackers, and productivity tools
+
+Each dashboard links to individual HTML pages in `public/`.
 
 ## Tech Stack
 - **Server**: Node.js + Express, serves static files from `public/`
 - **Deployment**: Railway (Nixpacks builder, auto PORT, `npm start`)
 - **Frontend**: Pure HTML/CSS, no build step. All styling is embedded in each HTML file.
 
-## Showcase Index Page (`public/index.html`) — Design Rules
+## Site Structure
 
-### Card Grid System
-- The index page uses a **CSS Grid** with `repeat(auto-fill, minmax(220px, 1fr))` — cards automatically flow into rows and columns based on screen width.
-- All cards **MUST** use the `.demo-card` class and follow this exact HTML structure:
+### Index Page (`public/index.html`)
+Shows 3 **folder cards** (`.folder-card` class) linking to category dashboards:
+- Archetypes → `archetypes.html`
+- Client Work → `client-work.html`
+- Tools → `tools.html`
+
+Folder cards are `height: 140px` with an icon, title, and page count meta line. Do NOT add individual page cards to index.html — it only contains category folders.
+
+### Category Dashboards (`archetypes.html`, `client-work.html`, `tools.html`)
+Each dashboard shows a grid of **page cards** (`.demo-card` class) linking to individual pages. They share the same card structure:
+
 ```html
 <a href="page-name.html" class="demo-card">
   <span class="arrow">&rarr;</span>
@@ -20,21 +35,25 @@ This is a static showcase/portfolio site served by Express.js on Railway. It dis
   <div class="desc">Short one-line description</div>
 </a>
 ```
-- Cards have a fixed `height: 110px` so they all appear exactly the same size.
-- Titles use `text-overflow: ellipsis` and descriptions use `-webkit-line-clamp: 2` to gracefully truncate overflow.
-- **Descriptions should be kept short** (under ~60 characters preferred) but longer text will be truncated cleanly.
 
-### Adding a New Card
-1. Create the HTML page in `public/` (e.g., `public/my-new-page.html`)
-2. Add a new `<a>` element inside the `<div class="grid">` section of `public/index.html`, **before** the closing comment marker
-3. Use the exact card structure above — do NOT deviate from this format
-4. **Do NOT** add cards outside the `.grid` div — no full-width cards, no separate sections, no different card styles
-5. If linking to an external URL, add `target="_blank"` to the `<a>` tag
+- Cards have a fixed `height: 110px`
+- Titles use `text-overflow: ellipsis`, descriptions use `-webkit-line-clamp: 2`
+- Each dashboard has a `<!-- Add new cards here -->` comment marker for the CCP bot
+- Each dashboard has a `<a href="/" class="back">` link to return to the index
+- Only `archetypes.html` has a private/hidden section
 
-### Adding a Private Card
-Private cards go in the `<div class="hidden-grid">` section (below the "Private" divider). Same card structure applies.
+### Adding a New Page
+1. Create the HTML page in `public/` (e.g., `public/my-page.html`)
+2. Add a card to the correct **category dashboard** (NOT index.html), before the `<!-- Add new cards here -->` comment
+3. Use the exact `.demo-card` structure above
+4. Update the page count in `index.html`'s folder card `.meta` element if needed
 
-### Design Tokens (CSS Variables)
+### Categories
+- **archetypes** — identity apps, archetype-themed experiences, ritual/practice tools
+- **client-work** — landing pages, SEO pages, client projects, business sites
+- **tools** — utilities, dashboards, productivity tools, trackers
+
+## Design Tokens (CSS Variables)
 ```
 --bg: #141210          (page background)
 --surface: #1e1c19     (card background)
@@ -48,21 +67,22 @@ Private cards go in the `<div class="hidden-grid">` section (below the "Private"
 --amber: #c4956a       (accent color)
 ```
 
-### Typography
+## Typography
 - **Headings/card titles**: `'Lora', serif` — weight 400
 - **Body/descriptions**: `'Inter', sans-serif` — weight 300
 - Card title: `0.95rem`, description: `0.72rem`
 
-### Animation
-- Cards use staggered `fadeUp` animations via `nth-child` selectors (supports up to 20 cards)
-- If adding more than 20 public cards, extend the nth-child animation delay rules in the CSS
+## Animation
+- Cards use staggered `fadeUp` animations via `nth-child` selectors (supports up to 10 cards per dashboard)
+- Do NOT use inline animation styles — the CSS nth-child rules handle it
 
-### Things to NEVER Do
+## Things to NEVER Do
+- Do NOT add page cards to `index.html` — it only has folder cards
 - Do NOT add cards outside the `.grid` or `.hidden-grid` containers
-- Do NOT create full-width card styles or alternate card layouts
-- Do NOT change the grid system (e.g., fixed columns) — `auto-fill` handles responsiveness
-- Do NOT use inline styles on cards for animation — the CSS nth-child rules handle it
-- Do NOT add a separate CSS file — all styles stay embedded in the HTML
+- Do NOT create alternate card layouts or styles
+- Do NOT change the grid system — `auto-fill` handles responsiveness
+- Do NOT use inline styles on cards for animation
+- Do NOT add separate CSS files — all styles stay embedded in HTML
 - Do NOT use JavaScript frameworks or build tools
 
 ## Individual Showcase Pages

@@ -11,7 +11,6 @@
 
   :root {
     --bg: #141210;
-    --bg-gradient: linear-gradient(180deg, #181512 0%, #141210 100%);
     --surface: #1e1c19;
     --surface-hover: #272420;
     --border: #2e2a26;
@@ -40,7 +39,7 @@
   .header {
     text-align: center;
     margin-bottom: 3rem;
-    animation: fadeUp 0.8s ease 0.1s both;
+    animation: fadeUp 0.6s ease 0.1s both;
   }
 
   .header h1 {
@@ -51,209 +50,103 @@
     letter-spacing: 0.01em;
   }
 
-  .header .subtitle {
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-weight: 300;
-    margin-top: 0.5rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* --- Card Grid --- */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 14px;
+    gap: 16px;
   }
 
-  .demo-card {
+  .folder-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px 20px;
+    border-radius: 14px;
+    padding: 26px 24px;
     text-decoration: none;
     color: inherit;
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 110px;
+    height: 140px;
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
   }
 
-  .demo-card::before {
+  .grid .folder-card:nth-child(1) { animation-delay: 0.15s; }
+  .grid .folder-card:nth-child(2) { animation-delay: 0.25s; }
+  .grid .folder-card:nth-child(3) { animation-delay: 0.35s; }
+
+  .folder-card::before {
     content: '';
     position: absolute;
     inset: 0;
     background: var(--amber-dim);
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: 12px;
+    border-radius: 14px;
   }
 
-  .demo-card:hover::before {
-    opacity: 1;
-  }
+  .folder-card:hover::before { opacity: 1; }
 
-  .demo-card:hover {
+  .folder-card:hover {
     background: var(--surface-hover);
     border-color: var(--border-hover);
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
   }
 
-  .demo-card .title {
+  .folder-card .folder-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .folder-card .title {
     font-family: 'Lora', serif;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 400;
     color: var(--text-bright);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.3rem;
     position: relative;
     z-index: 1;
-    padding-right: 24px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  .demo-card .desc {
-    font-size: 0.72rem;
+  .folder-card .meta {
+    font-size: 0.68rem;
     font-weight: 300;
-    color: var(--text-secondary);
-    line-height: 1.5;
+    color: var(--muted);
+    letter-spacing: 0.03em;
     position: relative;
     z-index: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 
-  .demo-card .arrow {
+  .folder-card .arrow {
     position: absolute;
-    top: 20px;
-    right: 18px;
-    font-size: 0.75rem;
+    top: 24px;
+    right: 22px;
+    font-size: 0.85rem;
     color: var(--muted);
     transition: color 0.2s ease, transform 0.2s ease;
     z-index: 1;
   }
 
-  .demo-card:hover .arrow {
+  .folder-card:hover .arrow {
     color: var(--amber);
     transform: translateX(3px);
   }
-
-  /* --- Stagger Animation (supports up to 20 cards) --- */
-  .demo-card {
-    opacity: 0;
-    animation: fadeUp 0.6s ease forwards;
-  }
-  .grid .demo-card:nth-child(1)  { animation-delay: 0.15s; }
-  .grid .demo-card:nth-child(2)  { animation-delay: 0.22s; }
-  .grid .demo-card:nth-child(3)  { animation-delay: 0.29s; }
-  .grid .demo-card:nth-child(4)  { animation-delay: 0.36s; }
-  .grid .demo-card:nth-child(5)  { animation-delay: 0.43s; }
-  .grid .demo-card:nth-child(6)  { animation-delay: 0.50s; }
-  .grid .demo-card:nth-child(7)  { animation-delay: 0.57s; }
-  .grid .demo-card:nth-child(8)  { animation-delay: 0.64s; }
-  .grid .demo-card:nth-child(9)  { animation-delay: 0.71s; }
-  .grid .demo-card:nth-child(10) { animation-delay: 0.78s; }
-  .grid .demo-card:nth-child(11) { animation-delay: 0.85s; }
-  .grid .demo-card:nth-child(12) { animation-delay: 0.92s; }
-  .grid .demo-card:nth-child(13) { animation-delay: 0.99s; }
-  .grid .demo-card:nth-child(14) { animation-delay: 1.06s; }
-  .grid .demo-card:nth-child(15) { animation-delay: 1.13s; }
-  .grid .demo-card:nth-child(16) { animation-delay: 1.20s; }
-  .grid .demo-card:nth-child(17) { animation-delay: 1.27s; }
-  .grid .demo-card:nth-child(18) { animation-delay: 1.34s; }
-  .grid .demo-card:nth-child(19) { animation-delay: 1.41s; }
-  .grid .demo-card:nth-child(20) { animation-delay: 1.48s; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* --- Hidden/Private Section --- */
-  .hidden-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 2rem 0 1rem;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    animation: fadeUp 0.6s ease 1.6s both;
-  }
-
-  .hidden-divider:hover .divider-text {
-    color: var(--text-secondary);
-  }
-
-  .divider-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .divider-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.55rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: color 0.3s ease;
-    white-space: nowrap;
-  }
-
-  .hidden-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 14px;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-  }
-
-  .hidden-grid.revealed {
-    max-height: 500px;
-    opacity: 1;
-  }
-
-  .hidden-grid .demo-card {
-    animation: none;
-    opacity: 1;
-  }
-
-  /* --- Footer --- */
-  .footer {
-    text-align: center;
-    margin-top: 3rem;
-    animation: fadeUp 0.6s ease 1.8s both;
-  }
-
-  .footer span {
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    font-weight: 300;
-  }
-
-  /* --- Responsive --- */
   @media (max-width: 600px) {
-    .grid, .hidden-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid { grid-template-columns: 1fr; gap: 12px; }
     body { padding: 2rem 1rem 3rem; }
-    .demo-card { height: 100px; padding: 18px 16px; }
-    .demo-card .title { font-size: 0.88rem; }
-  }
-
-  @media (max-width: 400px) {
-    .grid, .hidden-grid { grid-template-columns: 1fr; }
+    .folder-card { height: 130px; padding: 22px 20px; }
   }
 </style>
 </head>
@@ -265,119 +158,28 @@
   </div>
 
   <div class="grid">
-    <a href="coaching-landing.html" class="demo-card">
+    <a href="archetypes.html" class="folder-card">
       <span class="arrow">&rarr;</span>
-      <div class="title">Coaching Landing Page</div>
-      <div class="desc">SEO-optimized landing page for executive coaching services</div>
+      <div class="folder-icon">&#9813;</div>
+      <div class="title">Archetypes</div>
+      <div class="meta">4 apps</div>
     </a>
 
-    <a href="solopreneur-journey.html" class="demo-card">
+    <a href="client-work.html" class="folder-card">
       <span class="arrow">&rarr;</span>
-      <div class="title">Solopreneur Journey</div>
-      <div class="desc">A solopreneur's path to augmenting their workflow with AI</div>
+      <div class="folder-icon">&#9883;</div>
+      <div class="title">Client Work</div>
+      <div class="meta">6 pages</div>
     </a>
 
-    <a href="https://anchor-1-production.up.railway.app/" target="_blank" class="demo-card">
+    <a href="tools.html" class="folder-card">
       <span class="arrow">&rarr;</span>
-      <div class="title">Anchor Demo</div>
-      <div class="desc">Demo version of The Anchor dashboard</div>
-    </a>
-
-    <a href="mood-tracker.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">Mood Tracker</div>
-      <div class="desc">Daily mood tracking with streak counter</div>
-    </a>
-
-    <a href="king.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">The King</div>
-      <div class="desc">Duty, order, and sovereignty</div>
-    </a>
-
-    <a href="warriors.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">The Warrior</div>
-      <div class="desc">Discipline, endurance, and inner fire</div>
-    </a>
-
-    <a href="magician.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">The Magician</div>
-      <div class="desc">Transformation, mastery, and insight</div>
-    </a>
-
-    <a href="lover.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">The Lover</div>
-      <div class="desc">Cultivating presence and connection</div>
-    </a>
-
-    <a href="scuba-instructor-scottsdale.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">Scuba Instructor Scottsdale</div>
-      <div class="desc">Professional PADI certified scuba diving lessons in Arizona</div>
-    </a>
-
-    <a href="executive-instagram-guide.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">Instagram Coach Guide</div>
-      <div class="desc">Complete guide for executive coaches transitioning to Instagram</div>
-    </a>
-
-    <a href="monitor-layout-optimizer.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">Monitor Layout Guide</div>
-      <div class="desc">Optimize your 42-inch monitor setup for productivity</div>
-    </a>
-
-    <!-- Add new cards here. Follow the same structure:
-         <a href="page-name.html" class="demo-card">
-           <span class="arrow">&rarr;</span>
-           <div class="title">Card Title</div>
-           <div class="desc">Short one-line description</div>
-         </a>
-    -->
-  </div>
-
-
-    <a href="research-speaking-engagements.html" class="demo-card" style="animation: fadeUp 0.8s ease 1.7s both;">
-      <span class="arrow">&rarr;</span>
-      <div class="title">Speaker Fees Directory</div>
-      <div class="desc">Research-backed database of associations that pay speakers</div>
-    </a>
-
-  </div>
-
-  <div class="hidden-divider" onclick="togglePrivate()">
-    <div class="divider-line"></div>
-    <span class="divider-text" id="dividerText">Private</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="hidden-grid" id="hiddenGrid">
-    <a href="good-girl.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">The Good Girl</div>
-      <div class="desc">Rituals, devotion, and surrender</div>
-    </a>
-
-    <a href="daddy-dom.html" class="demo-card">
-      <span class="arrow">&rarr;</span>
-      <div class="title">The Daddy Dom</div>
-      <div class="desc">Authority, structure, and care</div>
+      <div class="folder-icon">&#9881;</div>
+      <div class="title">Tools</div>
+      <div class="meta">3 pages</div>
     </a>
   </div>
 </div>
-
-<script>
-  function togglePrivate() {
-    const grid = document.getElementById('hiddenGrid');
-    const text = document.getElementById('dividerText');
-    grid.classList.toggle('revealed');
-    text.textContent = grid.classList.contains('revealed') ? 'Hide' : 'Private';
-  }
-</script>
 
 </body>
 </html>
